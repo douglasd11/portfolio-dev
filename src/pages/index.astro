@@ -1,0 +1,211 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Douglas Guerrero">
+	<main>
+		<section class="flex flex-col items-center pb-20 bg-slate-200">
+			<div class="w-[1000px]">
+				<div> <!-- carousel -->
+
+					<div class="h-[400px] overflow-hidden relative">
+						<img class="w-[1000px] h-[400px] object-cover" src="./bannerLMO.png" alt="lmo">
+						<div class="absolute inset-0 bg-black opacity-20"></div>
+						<div class="text-white absolute bottom-12 left-12" >
+							<p class="font-semibold">Entretenimiento</p>
+							<p class="font-semibold">2024</p>
+							<h3 class="text-3xl pt-2 font-bold">LeerMangaOnline</h3>
+						</div>
+					</div>
+				</div>
+				<div class="flex justify-between h-16 max-h-16"> <!-- details -->
+					<div class="flex items-end gap-5 p-5 py-0">
+						<p class="text-[14px] font-bold mb-[21px]">Detalles</p>
+						<p class="text-[14px] font-semibold text-gray-500 max-w-72">Lector de mangas con todo tipo de obras traducidas a muchos idiomas</p>
+						<a class="bg-slate-700 p-2" href="#">
+							<img src="./ph_link-bold.png" alt="link">
+						</a>
+					</div>
+
+					<div class="flex cursor-pointer">
+						<img class="h-24 min-h-24 w-40 -mt-8 z-10" src="./midgarMac.png" alt="midgar">
+						<div class="flex items-center justify-between w-56 max-w-56 px-4 bg-white">
+							<div class="flex gap-3 font-semibold text-gray-500">
+								<p>02</p>
+								<p>Midgar</p>
+							</div>
+							<img src="./ep_arrow-bold.png" alt="siguiente">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="flex flex-col items-center py-10 pt-16 w-[1160px] m-auto">
+			<h1 class="text-[46px] font-bold py-5">Hola, Soy <span class="text-sky-400">Douglas</span>  ✌</h1>
+			<p class="w-2/3 text-center font-semibold text-[20px] py-5 text-gray-500">
+				Un programador web <b>Fullstack</b>, entusiasta, con más de <b>2 años de experiencia</b> 
+				creando interfaces intuitivas y dinámicas para mejorar la experiencia de 
+				los usuarios, tengo un alto nivel de lógica algorítmica, por lo que me 
+				emocionan los nuevos retos de eficiencia.
+			</p>
+
+			<h2 class="text-[30px] font-bold py-10 pt-16">Mis principales tecnologías</h2>
+			<div class="flex justify-around gap-10 py-3 pb-20">
+
+				<div class="flex flex-col text-center items-center">
+					<p class="w-[60px] py-1 border-b-2 border-black font-bold text-xl">01</p>
+					<img class="w-14 h-14 my-5" src="./logo_react.png" alt="react js">
+					<p class="font-bold text-xl">REACT JS</p>
+					<p class="py-1 text-gray-500">Librería de interfaces</p>
+				</div>
+				<div class="flex flex-col text-center items-center">
+					<p class="w-[60px] py-1 border-b-2 border-black font-bold text-xl">02</p>
+					<img class="w-14 h-14 my-5" src="./logo_nodejs.png" alt="react js">
+					<p class="font-bold text-xl">NODE JS</p>
+					<p class="py-1 text-gray-500">Entorno de ejecución</p>
+				</div>
+				<div class="flex flex-col text-center items-center">
+					<p class="w-[60px] py-1 border-b-2 border-black font-bold text-xl">03</p>
+					<img class="w-14 h-14 my-5" src="./logo_angular.png" alt="react js">
+					<p class="font-bold text-xl">ANGULAR</p>
+					<p class="py-1 text-gray-500">Librería de interfaces</p>
+				</div>
+				<div class="flex flex-col text-center items-center">
+					<p class="w-[60px] py-1 border-b-2 border-black font-bold text-xl">04</p>
+					<img class="w-14 h-14 my-5" src="./logo_tailwind.png" alt="react js">
+					<p class="font-bold text-xl">TAILWIND</p>
+					<p class="py-1 text-gray-500">Librería de utilidades</p>
+				</div>
+
+			</div>
+		</section>
+
+		<section class="bg-slate-200">
+			<div id="proyectos" class="w-[1160px] m-auto py-16">
+				<h2 class="text-[36px] font-bold">Mis proyectos.</h2>
+
+				<div class="flex flex-wrap justify-between py-10 gap-y-14">
+
+					<div class="flex flex-col gap-8 p-6 pb-0 justify-between bg-blue-500 w-[47%]">
+						<div class="flex justify-between text-white">
+							<div>
+								<p class="font-semibold">Entretenimiento</p>
+								<h3 class="text-[24px] font-bold">LeerMangaOnline</h3>
+								<p class="py-4 pr-3">Lector de mangas con todo tipo de obras traducidas a muchos idiomas.</p>
+							</div>
+							<div class="flex justify-center items-center w-[50px] h-[50px] min-w-[50px] bg-white bg-opacity-30 rounded-full cursor-pointer">
+								<img class="w-[25px] h-[25px]" src="./icon_github.png" alt="repositorio">
+							</div>
+						</div>
+						<a href="#">
+							<img src="./lmoShots.png" alt="proyecto manga">
+						</a>
+					</div>
+
+					<div class="flex flex-col gap-8 p-8 pb-0 justify-between bg-purple-500 w-[47%]">
+						<div class="flex justify-between text-white">
+							<div>
+								<p class="font-semibold">Informativa</p>
+								<h3 class="text-[24px] font-bold">LudoNex</h3>
+								<p class="py-4 pr-4">Landing page para la presentacion de una empresa desarrolladora de sotfware. </p>
+							</div>
+							<div class="flex justify-center items-center w-[50px] h-[50px] min-w-[50px] bg-white bg-opacity-30 rounded-full cursor-pointer">
+								<img class="w-[25px] h-[25px]" src="./icon_github.png" alt="repositorio">
+							</div>
+						</div>
+						<a href="https://ludonex.onrender.com/" target="_blank">
+							<img src="./ludonexShots.png" alt="ludonex">
+						</a>
+					</div>
+
+					<div class="flex flex-col gap-8 p-8 pb-0 justify-between bg-slate-500 w-[47%]">
+						<div class="flex justify-between text-white">
+							<div>
+								<p class="font-semibold">Comercio</p>
+								<h3 class="text-[24px] font-bold">Midgar</h3>
+								<p class="py-4 pr-4">Pos de venta para el inventario de productos y facturacion de las ventas.</p>
+							</div>
+							<div class="flex justify-center items-center w-[50px] h-[50px] min-w-[50px] bg-white bg-opacity-30 rounded-full cursor-pointer">
+								<img class="w-[25px] h-[25px]" src="./icon_github.png" alt="repositorio">
+							</div>
+						</div>
+						<a href="https://midgar.artosh.dev/landing" target="_blank">
+							<img src="./midjarShots.png" alt="proyecto midgar">
+						</a>
+					</div>
+
+					<div class="flex flex-col gap-8 p-8 pb-0 justify-between bg-rose-500 w-[47%]">
+						<div class="flex justify-between text-white">
+							<div>
+								<p class="font-semibold">Administrativa</p>
+								<h3 class="text-[24px] font-bold">GestorGaming</h3>
+								<p class="py-4 pr-4">Sistema para la gestion de productos tecnologicos.</p>
+							</div>
+							<div class="flex justify-center items-center w-[50px] h-[50px] min-w-[50px] bg-white bg-opacity-30 rounded-full cursor-pointer">
+								<img class="w-[25px] h-[25px]" src="./icon_github.png" alt="repositorio">
+							</div>
+						</div>
+						<a href="https://gestor-gaming-prods.onrender.com/" target="_blank">
+							<img src="./gestorgmShots.png" alt="gestor gaming">
+						</a>
+					</div>
+
+				</div>
+			</div>
+		</section>
+		
+		<section id="educacion" class="py-10 pt-16 w-[1160px] m-auto">
+			<h2 class="text-[36px] font-bold pb-4">Mi educacion.</h2>
+			<p class="max-w-96 text-gray-600">Algunos certificados obtenidos participando en instituciones y plataformas digitales</p>
+
+			<div class="flex w-full gap-x-12 py-10">
+
+				<div class="flex flex-col w-4/12 border-t-2 border-black pt-3 mt-16">
+					<div class="flex justify-between pb-8">
+						<div class="flex flex-col text-[16px] font-bold">
+							<h3 class="font-semibold">Universidad de antioquia.</h3>
+							<p>Habilidades de programacion</p>
+						</div>
+						<div class="w-8 h-8 bg-sky-500 rounded-full cursor-pointer">
+							<img src="./maki_arrow.png" alt="arrow">
+						</div>
+					</div>
+					<img src="./udeaShots.png" alt="udea">
+					
+				</div>
+
+				<div class="flex flex-col w-4/12 border-t-2 border-black pt-3">
+					<div class="flex justify-between pb-8">
+						<div class="flex flex-col text-[16px] font-bold">
+							<h3 class="font-semibold">Sena.</h3>
+							<p>Tecnico en sistemas</p>
+						</div>
+						<div class="w-8 h-8 bg-sky-500 rounded-full cursor-pointer">
+							<img src="./maki_arrow.png" alt="arrow">
+						</div>
+					</div>
+					<img src="./senaShots.png" alt="udea">
+					
+				</div>
+
+				<div class="flex flex-col w-4/12 border-t-2 border-black pt-3 -mt-16">
+					<div class="flex justify-between pb-8">
+						<div class="flex flex-col text-[16px] font-bold">
+							<h3 class="font-semibold">Udemy.</h3>
+							<p>Experto en JavaScript</p>
+						</div>
+						<div class="w-8 h-8 bg-sky-500 rounded-full cursor-pointer">
+							<img src="./maki_arrow.png" alt="arrow">
+						</div>
+					</div>
+					<img src="./udemyShots.png" alt="udea">
+					
+				</div>
+
+			</div>
+		</section>
+
+	</main>
+</Layout>
+
