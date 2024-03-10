@@ -1,45 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Slider from '../components/Slider';
+
 ---
 
 <Layout title="Douglas Guerrero">
 	<main>
-		<section class="flex flex-col items-center pb-20 bg-slate-200">
-			<div class="w-[1000px]">
-				<div> <!-- carousel -->
-
-					<div class="h-[400px] overflow-hidden relative">
-						<img class="w-[1000px] h-[400px] object-cover" src="./bannerLMO.png" alt="lmo">
-						<div class="absolute inset-0 bg-black opacity-20"></div>
-						<div class="text-white absolute bottom-12 left-12" >
-							<p class="font-semibold">Entretenimiento</p>
-							<p class="font-semibold">2024</p>
-							<h3 class="text-3xl pt-2 font-bold">LeerMangaOnline</h3>
-						</div>
-					</div>
-				</div>
-				<div class="flex justify-between h-16 max-h-16"> <!-- details -->
-					<div class="flex items-end gap-5 p-5 py-0">
-						<p class="text-[14px] font-bold mb-[21px]">Detalles</p>
-						<p class="text-[14px] font-semibold text-gray-500 max-w-72">Lector de mangas con todo tipo de obras traducidas a muchos idiomas</p>
-						<a class="bg-slate-700 p-2" href="#">
-							<img src="./ph_link-bold.png" alt="link">
-						</a>
-					</div>
-
-					<div class="flex cursor-pointer">
-						<img class="h-24 min-h-24 w-40 -mt-8 z-10" src="./midgarMac.png" alt="midgar">
-						<div class="flex items-center justify-between w-56 max-w-56 px-4 bg-white">
-							<div class="flex gap-3 font-semibold text-gray-500">
-								<p>02</p>
-								<p>Midgar</p>
-							</div>
-							<img src="./ep_arrow-bold.png" alt="siguiente">
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+		
+		<Slider client:load/>
 
 		<section class="flex flex-col items-center py-10 pt-16 w-[1160px] m-auto">
 			<h1 class="text-[46px] font-bold py-5">Hola, Soy <span class="text-sky-400">Douglas</span>  ✌</h1>
