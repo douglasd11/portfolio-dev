@@ -4,7 +4,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 
 
-
 const Slider = () => {
 
 	const [currentSlide, setCurrentSlide] = useState(1);
@@ -44,6 +43,7 @@ const Slider = () => {
 						showThumbs={false}
 						useKeyboardArrows
 						stopOnHover
+						autoPlay
 						swipeable
 						emulateTouch
 						selectedItem={currentSlide}
@@ -54,11 +54,11 @@ const Slider = () => {
 								return (
 									<div className="h-[400px] relative">
 										<img src={item.imagen} alt="lmo"/>
-										<div className="absolute inset-0 bg-black opacity-20"></div>
-										<div className="text-white absolute bottom-12 left-12 text-left">
+										<div className="absolute inset-0 bg-black opacity-30"></div>
+										<div className="text-white absolute bottom-16 left-16 text-left">
 											<p className="font-semibold">{item.categoria}</p>
 											<p className="font-semibold">{item.fecha}</p>
-											<h3 className="text-3xl pt-2 font-bold">{item.nombre}</h3>
+											<h3 className="text-4xl pt-2 font-bold">{item.nombre}</h3>
 										</div>
 									</div>
 								)
