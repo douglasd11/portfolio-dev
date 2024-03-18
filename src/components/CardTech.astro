@@ -1,0 +1,12 @@
+---
+
+const { item } = Astro.props;
+---
+
+<div class="flex flex-col text-center items-center">
+	<p class="w-[60px] py-1 border-b-2 border-black font-bold text-xl max-sm:text-lg">{item.number}</p>
+	<img class="w-14 h-14 my-5 max-sm:w-12 max-sm:h-12" src={item.image} alt="react js">
+	<p class="font-bold text-xl max-sm:text-lg">{item.title}</p>
+	<p class="py-1 text-gray-500 max-sm:text-sm">{item.description}</p>
+</div>
+
