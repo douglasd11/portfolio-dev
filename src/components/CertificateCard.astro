@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+
+const { certificate } = Astro.props;
+---
+
+<article class:list={["z-10 flex w-2/5 flex-col border-t-2 border-slate-950 pt-3 text-slate-950 dark:border-white dark:text-white max-sm:w-full", certificate.position]}>
+	<div class="flex justify-between pb-8">
+		<div class="flex flex-col text-base font-bold">
+			<h3 class="font-semibold">{certificate.institution}</h3>
+			<p data-i18n-es={certificate.title} data-i18n-en={certificate.titleEn}>{certificate.title}</p>
+		</div>
+		<a href={certificate.pdf} target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-full bg-sky-500" aria-label={`Abrir certificado: ${certificate.title}`}>
+			<img class="h-9 w-9" src="/maki_arrow.png" alt="" width="36" height="36" />
+		</a>
+	</div>
+	<a class="w-full" href={certificate.pdf} target="_blank" rel="noopener noreferrer" aria-label={`Ver certificado: ${certificate.title}`}>
+		<Image class="h-80 w-full object-cover" src={certificate.image} alt={`Certificado de ${certificate.institution}`} widths={[480, 720]} sizes="(max-width: 640px) 100vw, 460px" format="webp" loading="lazy" />
+	</a>
+</article>

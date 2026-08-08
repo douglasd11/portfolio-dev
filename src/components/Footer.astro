@@ -1,37 +1,32 @@
-<footer class="w-full bg-slate-950 text-white z-0">
-    <div class="flex flex-col w-[1160px] m-auto max-xl:w-auto max-xl:px-8">
-        
-        <div class="flex flex-wrap w-full justify-between py-8 pb-12 gap-y-4">
+---
+const year = new Date().getFullYear();
+---
 
-            <h3 class="text-[40px] font-bold">Escríbeme.</h3>
+<footer class="z-0 w-full bg-slate-950 text-white">
+	<div class="mx-auto flex w-full max-w-[1160px] flex-col px-8">
+		<div class="flex w-full flex-wrap justify-between gap-8 py-10">
+			<h2 class="text-4xl font-bold sm:text-[40px]">Escríbeme.</h2>
 
-            <div class="flex flex-wrap gap-32 gap-y-4 px-16 max-xl:px-8 max-md:px-0 max-md:gap-x-0 max-md:w-full max-md:justify-between">
-                
-                <a href="https://www.linkedin.com/in/douglas-ge/" class="flex items-end gap-4">
-                    <div class="flex justify-center items-center bg-white rounded-full w-12 h-12">
-                        <img class="w-6 h-6" src="./icon_linkedin_black.png" alt="linkedin">
-                    </div>
-                    <div class="flex flex-col text-[14px]">
-                        <p class="text-gray-400">Linkedin</p>
-                        <p>linkedin.com/in/douglas-ge/</p>
-                    </div>
-                </a>
+			<div class="flex flex-wrap gap-8 sm:gap-16">
+				<a href="https://www.linkedin.com/in/douglas-ge/" target="_blank" rel="noopener noreferrer" class="group flex items-end gap-4">
+					<span class="flex h-12 w-12 items-center justify-center rounded-full bg-white transition-transform group-hover:-translate-y-1">
+						<img class="h-6 w-6" src="/icon_linkedin_black.png" alt="" width="24" height="24" />
+					</span>
+					<span class="flex flex-col text-sm"><span class="text-gray-400">LinkedIn</span><span>linkedin.com/in/douglas-ge/</span></span>
+				</a>
 
-                <a href="https://github.com/douglasd11" class="flex items-end gap-4">
-                    <div class="flex justify-center items-center bg-white rounded-full w-12 h-12">
-                        <img class="w-6 h-6" src="./icon_github_black.png" alt="linkedin">
-                    </div>
-                    <div class="flex flex-col text-[14px]">
-                        <p class="text-gray-400">Github</p>
-                        <p>github.com/douglasd11</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="flex w-full justify-between py-4 border-t border-gray-500 max-md:text-xs">
-            <p class="text-left">Copyright @ 2024 todos los derechos reservados</p>
-            <p class="text-right">Desarrollado con React, Astro & Tailwindcss.</p>
-        </div>
+				<a href="https://github.com/douglasd11" target="_blank" rel="noopener noreferrer" class="group flex items-end gap-4">
+					<span class="flex h-12 w-12 items-center justify-center rounded-full bg-white transition-transform group-hover:-translate-y-1">
+						<img class="h-6 w-6" src="/icon_github_black.png" alt="" width="24" height="24" />
+					</span>
+					<span class="flex flex-col text-sm"><span class="text-gray-400">GitHub</span><span>github.com/douglasd11</span></span>
+				</a>
+			</div>
+		</div>
 
-    </div>
+		<div class="flex w-full flex-col justify-between gap-2 border-t border-gray-600 py-4 text-xs sm:flex-row sm:text-sm">
+			<p>© {year} Douglas Guerrero. Todos los derechos reservados.</p>
+			<p>Desarrollado con Astro, Three.js y Tailwind CSS.</p>
+		</div>
+	</div>
 </footer>

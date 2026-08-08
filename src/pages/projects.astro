@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+---
+
+<Layout
+	title="Proyectos — Douglas Guerrero"
+	description="Proyectos de Douglas Guerrero: productos web, experiencias de entretenimiento y sistemas de gestión."
+>
+	<main id="contenido" class="min-h-screen bg-white transition-colors dark:bg-slate-950">
+		<section class="relative overflow-hidden border-b border-slate-200 px-8 py-20 transition-colors dark:border-slate-800 sm:py-28">
+			<div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(56,189,248,0.13),transparent_28%)] dark:bg-[radial-gradient(circle_at_75%_30%,rgba(56,189,248,0.11),transparent_30%)]" aria-hidden="true"></div>
+			<div class="relative mx-auto w-full max-w-[1160px]">
+				<p class="text-sm font-bold uppercase tracking-[0.22em] text-sky-500">Trabajo seleccionado</p>
+				<h1 class="mt-5 text-5xl font-bold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-7xl">Proyectos.</h1>
+				<p class="mt-6 max-w-2xl text-lg font-medium leading-relaxed text-slate-500 dark:text-slate-400 sm:text-xl">
+					Una selección de productos web, plataformas informativas y sistemas de gestión construidos alrededor de problemas concretos.
+				</p>
+			</div>
+		</section>
+
+		<section class="bg-slate-100 px-8 py-16 transition-colors dark:bg-slate-900 sm:py-20" aria-labelledby="projects-list-title">
+			<div class="mx-auto w-full max-w-[1160px]">
+				<div class="flex items-center justify-between gap-4">
+					<h2 id="projects-list-title" class="text-2xl font-bold text-slate-950 dark:text-white">Todos los proyectos</h2>
+					<p class="text-sm font-bold tabular-nums text-slate-400">{String(projects.length).padStart(2, '0')} proyectos</p>
+				</div>
+				<div class="flex flex-wrap justify-between gap-y-12 py-10">
+					{projects.map((project) => <ProjectCard project={project} />)}
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>

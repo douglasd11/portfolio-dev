@@ -1,19 +1,86 @@
-<header class="w-full border-b-0 border-slate-300 bg-white relative z-10">
-    <div class="flex justify-between items-center py-4 w-[1160px] m-auto max-xl:w-auto max-xl:px-6">
-        <div class="flex items-center gap-x-4 text-sm cursor-pointer">
-            <img 
-                class="rounded-full w-9 h-9"
-                src="./logo.png" alt="Douglas logo"
-            >
-            <p class="max-w-20 font-extrabold leading-4 text-slate-800">DOUGLAS DESARROLLADOR</p>
-        </div>
-        <nav class="flex items-center gap-x-10 text-lg font-semibold pt-2 text-slate-800">
-            <a class="max-md:hidden" href="#sobremi">Sobre mi</a>
-            <a class="max-md:hidden" href="#proyectos">Proyectos</a>
-            <a class="max-md:hidden" href="#educacion">Educacion</a>
-            <a href="https://www.linkedin.com/in/douglas-ge/" class="pb-1" target="_blank">
-                <img class="w-8 h-8" src="./icon_linkedin.png" alt="Linkedin">
-            </a>
-        </nav>
-    </div>
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const navItems = [
+	{ href: '/', labelEs: 'Inicio', labelEn: 'Home' },
+	{ href: '/projects', labelEs: 'Proyectos', labelEn: 'Projects' },
+	{ href: '/resume', labelEs: 'Resume', labelEn: 'Resume' }
+];
+---
+
+<header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-md transition-colors dark:border-slate-800 dark:bg-slate-950/90">
+	<div class="mx-auto flex w-full max-w-[1160px] flex-wrap items-center justify-between gap-3 px-6 py-3 sm:flex-nowrap sm:gap-6">
+		<a href="/" class="flex shrink-0 items-center gap-3 text-sm" aria-label="Ir a Inicio" data-i18n-label-es="Ir a Inicio" data-i18n-label-en="Go to Home">
+			<Image class="h-9 w-9 rounded-full ring-1 ring-slate-200 dark:ring-slate-700" src={logo} alt="Logo de Douglas Guerrero" width={36} height={36} />
+			<span class="hidden max-w-24 font-extrabold leading-4 text-slate-800 dark:text-white sm:inline" data-i18n-es="DOUGLAS DESARROLLADOR" data-i18n-en="DOUGLAS DEVELOPER">DOUGLAS DESARROLLADOR</span>
+		</a>
+
+		<nav aria-label="Navegación principal" data-i18n-label-es="Navegación principal" data-i18n-label-en="Main navigation" class="order-3 flex w-full items-center justify-center gap-6 whitespace-nowrap text-sm font-semibold text-slate-600 dark:text-slate-300 sm:order-none sm:ml-auto sm:w-auto sm:gap-8 sm:text-base">
+			{navItems.map((item) => {
+				const active = path === item.href;
+				return (
+					<a
+						href={item.href}
+						aria-current={active ? 'page' : undefined}
+						class:list={[
+							'relative py-1 transition-colors hover:text-sky-500',
+							active ? 'text-slate-950 after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-sky-400 dark:text-white' : ''
+						]}
+					>
+						<span data-i18n-es={item.labelEs} data-i18n-en={item.labelEn}>{item.labelEs}</span>
+					</a>
+				);
+			})}
+		</nav>
+
+		<div class="flex items-center gap-2">
+			<button type="button" data-language-toggle class="flex h-10 items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 text-xs text-slate-700 transition hover:border-sky-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-sky-500" aria-label="Cambiar el sitio a inglés">
+				<span data-language-option="es" class="rounded-full px-1.5 py-1 font-black">ES</span>
+				<span class="text-slate-300 dark:text-slate-600" aria-hidden="true">/</span>
+				<span data-language-option="en" class="rounded-full px-1.5 py-1 opacity-40">EN</span>
+			</button>
+
+			<button type="button" data-theme-toggle class="flex h-10 min-w-[78px] items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 text-xs font-bold text-slate-700 transition hover:border-sky-300 hover:text-sky-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-sky-500" aria-label="Activar modo oscuro">
+				<span data-theme-icon class="text-base" aria-hidden="true">☾</span>
+				<span data-theme-label>Dark</span>
+			</button>
+		</div>
+	</div>
 </header>
+
+<script>
+	import { applyLanguage, getCurrentLanguage, initializeLanguage } from '../scripts/language';
+
+	const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+	const label = toggle?.querySelector<HTMLElement>('[data-theme-label]');
+	const icon = toggle?.querySelector<HTMLElement>('[data-theme-icon]');
+
+	const updateThemeControl = () => {
+		const dark = document.documentElement.dataset.theme === 'dark';
+		if (label) label.textContent = dark ? 'Light' : 'Dark';
+		if (icon) icon.textContent = dark ? '☀' : '☾';
+		if (toggle) {
+			toggle.setAttribute('aria-label', dark ? 'Activar modo claro' : 'Activar modo oscuro');
+			toggle.setAttribute('aria-pressed', String(dark));
+		}
+	};
+
+	updateThemeControl();
+	toggle?.addEventListener('click', () => {
+		const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+		document.documentElement.dataset.theme = nextTheme;
+		document.documentElement.style.colorScheme = nextTheme;
+		localStorage.setItem('portfolio-theme', nextTheme);
+		const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+		if (themeMeta) themeMeta.content = nextTheme === 'dark' ? '#020617' : '#ffffff';
+		updateThemeControl();
+	});
+
+	const languageToggle = document.querySelector<HTMLButtonElement>('[data-language-toggle]');
+	initializeLanguage();
+	languageToggle?.addEventListener('click', () => {
+		applyLanguage(getCurrentLanguage() === 'es' ? 'en' : 'es', true);
+	});
+</script>

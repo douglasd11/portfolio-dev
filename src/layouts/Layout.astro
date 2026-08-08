@@ -1,51 +1,68 @@
 ---
-import '@fontsource-variable/onest';
+import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-
-interface Props { 
+interface Props {
 	title: string;
+	description?: string;
 }
 
-const { title } = Astro.props;
+const {
+	title,
+	description = 'Portfolio de Douglas Guerrero, desarrollador web full-stack especializado en crear experiencias digitales claras, rápidas y accesibles.'
+} = Astro.props;
+
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+const socialImageUrl = Astro.site ? new URL('/og.png', Astro.site) : '/og.png';
 ---
 
 <!doctype html>
 <html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Portfolio Douglas Developer" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/logo.png" />
+		<script is:inline>
+			(() => {
+				try {
+					const savedTheme = localStorage.getItem('portfolio-theme');
+					const theme = savedTheme === 'dark' ? 'dark' : 'light';
+					const savedLanguage = localStorage.getItem('portfolio-language');
+					const language = savedLanguage === 'en' ? 'en' : 'es';
+					document.documentElement.dataset.theme = theme;
+					document.documentElement.dataset.language = language;
+					document.documentElement.lang = language;
+					document.documentElement.style.colorScheme = theme;
+				} catch {
+					document.documentElement.dataset.theme = 'light';
+					document.documentElement.dataset.language = 'es';
+				}
+			})();
+		</script>
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#ffffff" />
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="es_CO" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={socialImageUrl} />
+		<meta property="og:image:alt" content="Douglas Guerrero — Desarrollador full-stack" />
+		<meta property="og:image:width" content="1728" />
+		<meta property="og:image:height" content="907" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={socialImageUrl} />
+		<link rel="canonical" href={canonicalUrl} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body>
-		<Header/>
+	<body class="transition-colors duration-300">
+		<a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg dark:focus:bg-slate-900">Saltar al contenido</a>
+		<Header />
 		<slot />
-		<Footer/>
+		<Footer />
 	</body>
 </html>
-
-<style is:global>
-	:root {
-		color-scheme: light dark;
-	}
-	html {
-		font-family: 'Onest Variable', system-ui, sans-serif;
-		background-color: white;
-		color: black;
-		scroll-behavior: smooth;
-	}
-
-	body{
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	main{
-		width: 100%;
-	}
-</style>

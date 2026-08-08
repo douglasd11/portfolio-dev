@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import profilePhoto from '../assets/douglas-profile.jpg';
+---
+
+<section class="relative isolate overflow-hidden border-b border-slate-200 bg-white transition-colors dark:border-slate-800 dark:bg-slate-950" aria-labelledby="hero-title">
+	<div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_84%_28%,rgba(56,189,248,0.12),transparent_27%)] dark:bg-[radial-gradient(circle_at_84%_28%,rgba(56,189,248,0.08),transparent_30%)]" aria-hidden="true"></div>
+
+	<div class="mx-auto grid min-h-[650px] w-full max-w-[1160px] items-center gap-12 px-6 py-16 sm:px-8 lg:grid-cols-[1.18fr_0.82fr] lg:gap-16 lg:py-20">
+		<div class="relative z-10 max-w-2xl">
+			<p class="text-sm font-bold uppercase tracking-[0.24em] text-sky-500" data-i18n-es="Hola, mi nombre es" data-i18n-en="Hi, my name is">Hola, mi nombre es</p>
+			<h1 id="hero-title" class="mt-4 text-5xl font-extrabold leading-[1.02] tracking-[-0.05em] text-slate-950 dark:text-white sm:text-6xl lg:text-7xl">
+				Douglas Guerrero
+			</h1>
+
+			<p class="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-slate-700 dark:text-slate-200 sm:text-xl">
+				Software Engineer <span class="text-sky-500">|</span> Backend Developer <span class="text-sky-500">|</span> Java, Spring Boot, Node.js <span class="text-sky-500">|</span> Angular, Next.js <span class="text-sky-500">|</span> PostgreSQL, Docker &amp; AWS
+			</p>
+
+			<div class="mt-8 flex flex-wrap gap-3">
+				<a href="/projects" class="inline-flex items-center justify-center rounded-xl bg-slate-950 px-5 py-3.5 font-bold text-white transition hover:-translate-y-0.5 hover:bg-sky-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-500 dark:bg-white dark:text-slate-950 dark:hover:bg-sky-400" data-i18n-es="Ver proyectos" data-i18n-en="View projects">
+					Ver proyectos
+				</a>
+				<a href="https://www.linkedin.com/in/douglas-ge/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3.5 font-bold text-slate-800 transition hover:-translate-y-0.5 hover:border-sky-400 hover:text-sky-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-400" data-i18n-es="Contactarme" data-i18n-en="Contact me">
+					Contactarme
+				</a>
+				<a href="/CV_Douglas_Guerrero_ATS.pdf" download="CV_Douglas_Guerrero_ATS.pdf" class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3.5 font-bold text-slate-800 transition hover:-translate-y-0.5 hover:border-sky-400 hover:text-sky-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-400">
+					<span data-i18n-es="Descargar CV" data-i18n-en="Download resume">Descargar CV</span>
+					<span aria-hidden="true">↓</span>
+				</a>
+			</div>
+
+			<p class="mt-9 max-w-xl text-lg leading-8 text-slate-500 dark:text-slate-400 sm:text-xl sm:leading-9">
+				<span data-language-copy="es">Construyo aplicaciones web y empresariales con foco en <strong class="font-bold text-slate-900 dark:text-white">backends robustos</strong>, APIs claras y experiencias frontend eficientes. Convierto requerimientos complejos en <strong class="font-bold text-slate-900 dark:text-white">software mantenible</strong> y preparado para crecer.</span>
+				<span data-language-copy="en" hidden>I build web and enterprise applications focused on <strong class="font-bold text-slate-900 dark:text-white">robust backends</strong>, clear APIs, and efficient frontend experiences. I turn complex requirements into <strong class="font-bold text-slate-900 dark:text-white">maintainable software</strong> designed to scale.</span>
+			</p>
+		</div>
+
+		<div class="mx-auto w-full max-w-[440px] lg:mx-0 lg:justify-self-end">
+			<div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] border border-slate-300 bg-slate-100 p-3 shadow-[0_24px_70px_rgba(15,23,42,0.13)] transition-colors dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_24px_70px_rgba(0,0,0,0.4)]">
+				<div class="h-full w-full overflow-hidden rounded-[1.35rem]">
+					<Image
+						src={profilePhoto}
+						alt="Douglas Guerrero, ingeniero de software y desarrollador backend"
+						class="h-full w-full origin-top scale-[1.18] object-cover object-top"
+						widths={[320, 440, 640]}
+						sizes="(min-width: 1024px) 440px, min(100vw - 48px, 440px)"
+						loading="eager"
+						fetchpriority="high"
+					/>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,28 @@
+---
+import { Image } from 'astro:assets';
+
+const { project } = Astro.props;
+---
+
+<article class="z-10 flex w-[47%] flex-col justify-between gap-8 overflow-hidden rounded-2xl p-8 pb-0 shadow-[0_20px_50px_rgba(15,23,42,0.12)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_26px_65px_rgba(15,23,42,0.18)] max-md:w-full" style={`background: ${project.gradient}`}>
+	<div class="flex flex-col text-white">
+		<div class="flex justify-between gap-5">
+			<div class="flex flex-col justify-between">
+				<p class="font-semibold max-sm:text-sm" data-i18n-es={project.category} data-i18n-en={project.categoryEn}>{project.category}</p>
+				<h3 class="text-2xl font-bold max-sm:text-xl">{project.name}</h3>
+			</div>
+			<a href="https://github.com/douglasd11" target="_blank" rel="noopener noreferrer" class="flex h-[50px] w-[50px] min-w-[50px] items-center justify-center rounded-full bg-white/30 transition-transform hover:scale-105" aria-label={`Ver el perfil de GitHub relacionado con ${project.name}`}>
+				<img class="h-[25px] w-[25px]" src="/icon_github.png" alt="" width="25" height="25" />
+			</a>
+		</div>
+		<p class="py-4 pr-3" data-i18n-es={project.description} data-i18n-en={project.descriptionEn}>{project.description}</p>
+	</div>
+
+	{project.link ? (
+		<a href={project.link} target="_blank" rel="noopener noreferrer" aria-label={`Abrir proyecto ${project.name}`}>
+			<Image class="w-full" src={project.image} alt={`Vista del proyecto ${project.name}`} widths={[480, 720, 960]} sizes="(max-width: 768px) 100vw, 550px" format="webp" loading="lazy" />
+		</a>
+	) : (
+		<Image class="w-full" src={project.image} alt={`Vista del proyecto ${project.name}`} widths={[480, 720, 960]} sizes="(max-width: 768px) 100vw, 550px" format="webp" loading="lazy" />
+	)}
+</article>

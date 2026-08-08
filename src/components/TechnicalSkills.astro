@@ -1,0 +1,30 @@
+---
+import { skillGroups } from '../data/portfolio';
+---
+
+<section class="relative z-10 w-full pb-20 pt-16" aria-labelledby="technical-skills-title">
+	<div class="flex items-center gap-3">
+		<span class="h-2.5 w-2.5 rounded-full bg-sky-400" aria-hidden="true"></span>
+		<h3 id="technical-skills-title" class="text-2xl font-bold tracking-[-0.02em] text-slate-950 dark:text-white sm:text-3xl" data-i18n-es="Habilidades técnicas" data-i18n-en="Technical skills">Habilidades técnicas</h3>
+	</div>
+
+	<div class="mt-9 grid gap-8 md:grid-cols-3 md:gap-6 lg:gap-8">
+		{skillGroups.map((group) => (
+			<article>
+				<div class="flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-800">
+					<h4 class="font-bold text-slate-800 dark:text-slate-200" data-i18n-es={group.title} data-i18n-en={group.titleEn}>{group.title}</h4>
+					<span class="text-xs font-bold tabular-nums text-slate-400">{String(group.skills.length).padStart(2, '0')}</span>
+				</div>
+
+				<ul class="mt-3 space-y-2.5" aria-label={`Tecnologías de ${group.title}`} data-i18n-label-es={`Tecnologías de ${group.title}`} data-i18n-label-en={`${group.titleEn} technologies`}>
+					{group.skills.map((skill) => (
+						<li class="group rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-[0_5px_18px_rgba(15,23,42,0.035)] transition duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-[0_10px_28px_rgba(14,165,233,0.10)] dark:border-slate-800 dark:bg-slate-900 dark:hover:border-sky-500">
+							<p class="font-semibold text-slate-800 transition-colors group-hover:text-sky-600 dark:text-slate-200 dark:group-hover:text-sky-400">{skill.name}</p>
+							<p class="mt-1 text-xs leading-relaxed text-slate-400 dark:text-slate-500" data-i18n-es={skill.description} data-i18n-en={skill.descriptionEn}>{skill.description}</p>
+						</li>
+					))}
+				</ul>
+			</article>
+		))}
+	</div>
+</section>

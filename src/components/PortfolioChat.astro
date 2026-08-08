@@ -1,0 +1,825 @@
+---
+const suggestions = [
+	{ label: 'Sobre Douglas', labelEn: 'About Douglas', prompt: 'Cuéntame sobre Douglas y su perfil profesional.', promptEn: 'Tell me about Douglas and his professional profile.' },
+	{ label: 'Mejores proyectos', labelEn: 'Best projects', prompt: '¿Cuáles son los mejores proyectos de Douglas?', promptEn: 'What are Douglas’s best projects?' },
+	{ label: 'Stack tecnológico', labelEn: 'Tech stack', prompt: '¿Cuál es el stack tecnológico de Douglas?', promptEn: 'What is Douglas’s technology stack?' }
+];
+---
+
+<section id="chat" data-chat-root class="chat-section relative isolate overflow-hidden border-b border-slate-200 bg-white px-5 py-20 transition-colors dark:border-slate-800 dark:bg-slate-950 sm:px-8 sm:py-28" aria-labelledby="chat-title">
+	<div class="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_16%_18%,rgba(56,189,248,0.13),transparent_26%),radial-gradient(circle_at_84%_70%,rgba(139,92,246,0.10),transparent_24%)]" aria-hidden="true"></div>
+	<div class="chat-grid pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden="true"></div>
+	<div class="pointer-events-none absolute left-[8%] top-[20%] h-1.5 w-1.5 rounded-full bg-sky-300/70" aria-hidden="true"></div>
+	<div class="pointer-events-none absolute right-[12%] top-[30%] h-1 w-1 rounded-full bg-violet-400/60" aria-hidden="true"></div>
+	<div class="pointer-events-none absolute bottom-[18%] left-[18%] h-1 w-1 rounded-full bg-sky-400/50" aria-hidden="true"></div>
+
+	<div class="relative mx-auto max-w-[980px] text-center">
+		<p class="mx-auto mb-7 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-xs font-bold text-slate-500 shadow-sm backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-300 sm:text-sm">
+			<span class="text-base text-sky-500" aria-hidden="true">✦</span>
+			<span data-i18n-es="Asistente de IA · Impulsado por Groq" data-i18n-en="AI assistant · Powered by Groq">Asistente de IA · Impulsado por Groq</span>
+		</p>
+
+		<h2 id="chat-title" class="mx-auto max-w-4xl text-5xl font-bold leading-[1.03] tracking-[-0.05em] text-slate-950 dark:text-white sm:text-6xl lg:text-7xl">
+			<span data-language-copy="es">Conoce mi trabajo. O pregunta sobre <span class="chat-gradient-text">cualquier tema.</span></span>
+			<span data-language-copy="en" hidden>Explore my work. Or ask about <span class="chat-gradient-text">anything.</span></span>
+		</h2>
+		<p class="mx-auto mt-7 max-w-2xl text-lg font-medium leading-relaxed text-slate-500 dark:text-slate-400 sm:text-xl" data-i18n-es="Puedo hablarte sobre Douglas, sus proyectos, habilidades, tecnologías y formación, además de conversar sobre cualquier tema." data-i18n-en="I can tell you about Douglas, his projects, skills, technologies, and education, while also discussing any topic.">
+			Puedo hablarte sobre Douglas, sus proyectos, habilidades, tecnologías y formación, además de conversar sobre cualquier tema.
+		</p>
+
+		<div data-chat-shell class="chat-shell isolate mx-auto mt-10 w-full max-w-3xl overflow-visible rounded-[1.6rem] border border-slate-200 bg-white text-left shadow-[0_16px_50px_rgba(15,23,42,0.09)] ring-1 ring-slate-950/5 transition-all duration-300 focus-within:border-sky-400/70 focus-within:ring-4 focus-within:ring-sky-500/10 dark:border-slate-700/80 dark:bg-slate-900 dark:ring-white/5 sm:mt-12">
+			<div data-chat-conversation class="hidden">
+				<header class="flex items-center justify-between rounded-t-[1.55rem] border-b border-slate-200 bg-slate-50/80 px-4 py-3.5 dark:border-slate-800 dark:bg-slate-900 sm:px-6 sm:py-4">
+					<div class="flex items-center gap-3">
+						<div class="relative flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-xs font-black tracking-wide text-white" aria-hidden="true">
+							DG
+							<span class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-emerald-400 dark:border-slate-900"></span>
+						</div>
+						<div>
+							<h3 class="font-bold leading-tight text-slate-900 dark:text-white" data-i18n-es="Asistente de Douglas" data-i18n-en="Douglas's assistant">Asistente de Douglas</h3>
+							<p data-chat-status class="text-xs font-medium text-slate-400" aria-live="polite">En línea</p>
+						</div>
+					</div>
+					<button type="button" data-chat-reset class="rounded-full px-3 py-2 text-xs font-bold text-slate-500 transition hover:bg-white hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white sm:text-sm">
+						<span data-i18n-es="Nueva conversación" data-i18n-en="New conversation">Nueva conversación</span>
+					</button>
+				</header>
+
+				<div data-chat-scroll class="h-[350px] overflow-y-auto overscroll-contain bg-white dark:bg-slate-950 sm:h-[430px]">
+					<div class="px-4 py-7 sm:px-7 sm:py-8">
+						<div data-chat-messages class="flex flex-col gap-7" role="log" aria-live="polite" aria-relevant="additions text"></div>
+					</div>
+				</div>
+			</div>
+
+			<form data-chat-form class="flex w-full flex-col rounded-[1.55rem] bg-white p-3 dark:bg-slate-900 sm:p-4">
+				<label class="sr-only" for="portfolio-chat-input" data-i18n-es="Escribe una pregunta" data-i18n-en="Write a question">Escribe una pregunta</label>
+				<textarea id="portfolio-chat-input" data-chat-input rows="2" maxlength="1200" placeholder="Pregunta lo que quieras..." data-i18n-placeholder-es="Pregunta lo que quieras..." data-i18n-placeholder-en="Ask anything..." class="max-h-40 min-h-20 w-full resize-none bg-transparent px-2 py-2 text-[15px] leading-7 text-slate-800 outline-none placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500 sm:px-3 sm:text-base" required></textarea>
+
+				<div class="mt-2 flex flex-wrap items-center justify-between gap-3">
+					<div class="relative min-w-0" data-chat-settings-root>
+						<input type="hidden" data-chat-model value="openai/gpt-oss-120b" />
+						<input type="hidden" data-chat-reasoning value="medium" />
+
+						<div id="chat-settings-menu" data-chat-settings-menu hidden role="menu" class="chat-settings-menu absolute bottom-[calc(100%+0.55rem)] left-0 z-30 overflow-visible rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_55px_rgba(15,23,42,0.20)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_20px_60px_rgba(0,0,0,0.48)]">
+							<button type="button" data-chat-settings-section="model" role="menuitem" class="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition hover:bg-slate-100 focus-visible:bg-slate-100 dark:hover:bg-slate-800 dark:focus-visible:bg-slate-800">
+								<span class="font-medium text-slate-700 dark:text-slate-200" data-i18n-es="Modelo" data-i18n-en="Model">Modelo</span>
+								<span data-chat-model-value class="ml-auto max-w-36 truncate font-semibold text-slate-400">GPT-OSS 120B</span>
+								<span class="chat-chevron chat-chevron-right" aria-hidden="true"></span>
+							</button>
+
+							<button type="button" data-chat-settings-section="reasoning" role="menuitem" class="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition hover:bg-slate-100 focus-visible:bg-slate-100 dark:hover:bg-slate-800 dark:focus-visible:bg-slate-800">
+								<span class="font-medium text-slate-700 dark:text-slate-200" data-i18n-es="Esfuerzo" data-i18n-en="Effort">Esfuerzo</span>
+								<span data-chat-reasoning-value class="ml-auto font-semibold text-slate-400">Medio</span>
+								<span class="chat-chevron chat-chevron-right" aria-hidden="true"></span>
+							</button>
+
+							<div class="mx-2 my-1 border-t border-slate-200 dark:border-slate-700"></div>
+							<button type="button" data-chat-settings-reset class="flex min-h-10 w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white">
+								<span data-i18n-es="Restablecer valores" data-i18n-en="Reset defaults">Restablecer valores</span>
+								<span class="text-base" aria-hidden="true">↻</span>
+							</button>
+							<div class="mx-2 my-1 border-t border-slate-200 dark:border-slate-700"></div>
+							<div class="flex min-h-9 items-center gap-3 px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400">
+								<span data-i18n-es="Créditos de hoy" data-i18n-en="Today's credits">Créditos de hoy</span>
+								<span data-chat-credits class="ml-auto font-bold text-slate-700 dark:text-slate-200">40 / 40</span>
+							</div>
+							<div class="flex min-h-9 items-center gap-3 px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400">
+								<span data-i18n-es="Costo de la respuesta" data-i18n-en="Response cost">Costo de la respuesta</span>
+								<span data-chat-credit-cost class="ml-auto font-bold text-slate-700 dark:text-slate-200">3</span>
+							</div>
+
+							<div data-chat-settings-submenu="model" hidden role="menu" aria-label="Modelo" class="chat-settings-submenu absolute left-[calc(100%+0.5rem)] top-2 z-10 w-[min(17rem,calc(100vw-3.5rem))] rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_55px_rgba(15,23,42,0.20)] dark:border-slate-700 dark:bg-slate-900 max-sm:left-0">
+								<button type="button" data-chat-model-option="openai/gpt-oss-20b" role="menuitemradio" aria-checked="false" class="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+									<span>GPT-OSS 20B</span>
+									<span data-chat-option-check class="chat-check ml-auto" aria-hidden="true"></span>
+								</button>
+								<button type="button" data-chat-model-option="openai/gpt-oss-120b" role="menuitemradio" aria-checked="true" class="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+									<span>GPT-OSS 120B</span>
+									<span data-chat-option-check class="chat-check ml-auto" aria-hidden="true"></span>
+								</button>
+							</div>
+
+							<div data-chat-settings-submenu="reasoning" hidden role="menu" aria-label="Esfuerzo" class="chat-settings-submenu absolute left-[calc(100%+0.5rem)] top-[3.25rem] z-10 w-[min(15rem,calc(100vw-3.5rem))] rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_18px_55px_rgba(15,23,42,0.20)] dark:border-slate-700 dark:bg-slate-900 max-sm:left-0">
+								<button type="button" data-chat-reasoning-option="low" role="menuitemradio" aria-checked="false" class="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+									<span data-i18n-es="Bajo" data-i18n-en="Low">Bajo</span>
+									<span data-chat-option-check class="chat-check ml-auto" aria-hidden="true"></span>
+								</button>
+								<button type="button" data-chat-reasoning-option="medium" role="menuitemradio" aria-checked="true" class="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+									<span data-i18n-es="Medio" data-i18n-en="Medium">Medio</span>
+									<span data-chat-option-check class="chat-check ml-auto" aria-hidden="true"></span>
+								</button>
+								<button type="button" data-chat-reasoning-option="high" role="menuitemradio" aria-checked="false" class="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+									<span data-i18n-es="Alto" data-i18n-en="High">Alto</span>
+									<span data-chat-option-check class="chat-check ml-auto" aria-hidden="true"></span>
+								</button>
+							</div>
+						</div>
+
+						<button type="button" data-chat-settings-toggle aria-expanded="false" aria-controls="chat-settings-menu" class="chat-settings-toggle flex h-9 items-center justify-between gap-2 rounded-xl border border-transparent bg-slate-100 px-3 text-xs font-bold text-slate-800 hover:border-slate-200 hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-slate-800 dark:text-white dark:hover:border-slate-700 dark:hover:bg-slate-700 sm:text-sm">
+							<span data-chat-settings-summary class="truncate">GPT-OSS 120B · Medio</span>
+							<span class="chat-chevron chat-chevron-down ml-1" aria-hidden="true"></span>
+						</button>
+					</div>
+
+					<button type="submit" data-chat-submit disabled class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-slate-950 p-0 text-lg font-bold leading-none text-white transition hover:-translate-y-0.5 hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:translate-y-0 dark:bg-white dark:text-slate-950 dark:hover:bg-sky-400" aria-label="Enviar pregunta" data-i18n-label-es="Enviar pregunta" data-i18n-label-en="Send question">
+						<span class="chat-send-icon" aria-hidden="true"></span>
+					</button>
+				</div>
+			</form>
+		</div>
+
+		<div data-chat-intro-extras>
+			<div class="mt-4 flex flex-wrap justify-center gap-2.5" aria-label="Preguntas sugeridas" data-i18n-label-es="Preguntas sugeridas" data-i18n-label-en="Suggested questions">
+				{suggestions.map(({ label, labelEn, prompt, promptEn }) => (
+					<button type="button" data-chat-suggestion data-prompt-es={prompt} data-prompt-en={promptEn} data-i18n-es={label} data-i18n-en={labelEn} class="rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-sky-300 hover:text-sky-600 dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-300 dark:hover:border-sky-500 dark:hover:text-sky-400">
+						{label}
+					</button>
+				))}
+			</div>
+		</div>
+
+		<p class="mt-7 text-[11px] font-medium text-slate-400" data-i18n-es="La IA puede equivocarse. Verifica la información importante." data-i18n-en="AI can make mistakes. Verify important information.">La IA puede equivocarse. Verifica la información importante.</p>
+	</div>
+</section>
+
+<script>
+	type Message = { role: 'user' | 'assistant'; content: string };
+
+	const root = document.querySelector<HTMLElement>('[data-chat-root]');
+	const shell = root?.querySelector<HTMLElement>('[data-chat-shell]');
+	const conversation = root?.querySelector<HTMLElement>('[data-chat-conversation]');
+	const introExtras = root?.querySelector<HTMLElement>('[data-chat-intro-extras]');
+	const form = root?.querySelector<HTMLFormElement>('[data-chat-form]');
+	const input = root?.querySelector<HTMLTextAreaElement>('[data-chat-input]');
+	const submitButton = root?.querySelector<HTMLButtonElement>('[data-chat-submit]');
+	const resetButton = root?.querySelector<HTMLButtonElement>('[data-chat-reset]');
+	const messagesRoot = root?.querySelector<HTMLElement>('[data-chat-messages]');
+	const scrollRoot = root?.querySelector<HTMLElement>('[data-chat-scroll]');
+	const status = root?.querySelector<HTMLElement>('[data-chat-status]');
+	const suggestionButtons = root?.querySelectorAll<HTMLButtonElement>('[data-chat-suggestion]');
+	const modelSelect = root?.querySelector<HTMLInputElement>('[data-chat-model]');
+	const reasoningSelect = root?.querySelector<HTMLInputElement>('[data-chat-reasoning]');
+	const settingsRoot = root?.querySelector<HTMLElement>('[data-chat-settings-root]');
+	const settingsMenu = root?.querySelector<HTMLElement>('[data-chat-settings-menu]');
+	const settingsToggle = root?.querySelector<HTMLButtonElement>('[data-chat-settings-toggle]');
+	const settingsReset = root?.querySelector<HTMLButtonElement>('[data-chat-settings-reset]');
+	const settingsSectionButtons = root?.querySelectorAll<HTMLButtonElement>('[data-chat-settings-section]');
+	const settingsSubmenus = root?.querySelectorAll<HTMLElement>('[data-chat-settings-submenu]');
+	const modelOptionButtons = root?.querySelectorAll<HTMLButtonElement>('[data-chat-model-option]');
+	const reasoningOptionButtons = root?.querySelectorAll<HTMLButtonElement>('[data-chat-reasoning-option]');
+	const settingsSummary = root?.querySelector<HTMLElement>('[data-chat-settings-summary]');
+	const modelValue = root?.querySelector<HTMLElement>('[data-chat-model-value]');
+	const reasoningValue = root?.querySelector<HTMLElement>('[data-chat-reasoning-value]');
+	const creditsValue = root?.querySelector<HTMLElement>('[data-chat-credits]');
+	const creditCostValue = root?.querySelector<HTMLElement>('[data-chat-credit-cost]');
+	const allowedModels = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'];
+	const allowedReasoning = ['low', 'medium', 'high'];
+
+	let messages: Message[] = [];
+	let generating = false;
+	let controller: AbortController | null = null;
+	let creditLimit = 40;
+	let creditsRemaining: number | null = null;
+	let creditsResetAt: string | null = null;
+
+	const getCurrentCreditCost = () => {
+		const isSmallModel = modelSelect?.value === 'openai/gpt-oss-20b';
+		const effort = reasoningSelect?.value || 'medium';
+		return isSmallModel ? (effort === 'high' ? 2 : 1) : (effort === 'high' ? 5 : 3);
+	};
+
+	const updateSubmitAvailability = () => {
+		if (!submitButton) return;
+		const lacksCredits = creditsRemaining !== null && creditsRemaining < getCurrentCreditCost();
+		const hasPrompt = Boolean(input?.value.trim());
+		submitButton.disabled = generating || lacksCredits || !hasPrompt;
+		const language = document.documentElement.dataset.language === 'en' ? 'en' : 'es';
+		if (lacksCredits) {
+			submitButton.title = language === 'en'
+				? 'Not enough daily credits for this configuration.'
+				: 'No tienes suficientes créditos diarios para esta configuración.';
+		} else {
+			submitButton.removeAttribute('title');
+		}
+	};
+
+	const updateCreditUi = () => {
+		const cost = getCurrentCreditCost();
+		if (creditCostValue) creditCostValue.textContent = String(cost);
+		if (creditsValue) {
+			creditsValue.textContent = creditsRemaining === null ? `— / ${creditLimit}` : `${creditsRemaining} / ${creditLimit}`;
+			const lacksCredits = creditsRemaining !== null && creditsRemaining < cost;
+			creditsValue.classList.toggle('text-rose-500', lacksCredits);
+			creditsValue.classList.toggle('dark:text-rose-400', lacksCredits);
+			if (creditsResetAt) creditsValue.title = new Date(creditsResetAt).toLocaleString();
+		}
+		updateSubmitAvailability();
+	};
+
+	const applyCreditHeaders = (response: Response) => {
+		const remainingHeader = response.headers.get('X-Credits-Remaining');
+		const limitHeader = response.headers.get('X-Credits-Limit');
+		const remaining = remainingHeader === null ? Number.NaN : Number(remainingHeader);
+		const limit = limitHeader === null ? Number.NaN : Number(limitHeader);
+		if (Number.isFinite(remaining)) creditsRemaining = remaining;
+		if (Number.isFinite(limit) && limit > 0) creditLimit = limit;
+		creditsResetAt = response.headers.get('X-Credits-Reset') || creditsResetAt;
+		updateCreditUi();
+	};
+
+	const loadCreditBalance = async () => {
+		try {
+			const response = await fetch('/api/chat', { headers: { Accept: 'application/json' } });
+			applyCreditHeaders(response);
+			if (!response.ok) return;
+			const balance = await response.json() as { limit?: number; remaining?: number; resetAt?: string };
+			if (typeof balance.limit === 'number') creditLimit = balance.limit;
+			if (typeof balance.remaining === 'number') creditsRemaining = balance.remaining;
+			if (typeof balance.resetAt === 'string') creditsResetAt = balance.resetAt;
+			updateCreditUi();
+		} catch {
+			// The chat remains usable; POST will enforce and report the authoritative quota.
+		}
+	};
+
+	const setSettingsOpen = (open: boolean) => {
+		if (!settingsMenu || !settingsToggle) return;
+		settingsMenu.hidden = !open;
+		settingsToggle.setAttribute('aria-expanded', String(open));
+		if (!open) settingsSubmenus?.forEach((submenu) => { submenu.hidden = true; });
+	};
+
+	const setSettingsSubmenu = (name: string | null) => {
+		settingsSubmenus?.forEach((submenu) => {
+			submenu.hidden = submenu.dataset.chatSettingsSubmenu !== name;
+		});
+	};
+
+	const updateSettingsUi = () => {
+		const selectedModel = modelSelect?.value === 'openai/gpt-oss-20b' ? 'GPT-OSS 20B' : 'GPT-OSS 120B';
+		const language = document.documentElement.dataset.language === 'en' ? 'en' : 'es';
+		const effortLabels = language === 'en'
+			? { low: 'Low', medium: 'Medium', high: 'High' }
+			: { low: 'Bajo', medium: 'Medio', high: 'Alto' };
+		const selectedEffort = effortLabels[(reasoningSelect?.value || 'medium') as keyof typeof effortLabels];
+		if (modelValue) modelValue.textContent = selectedModel;
+		if (reasoningValue) reasoningValue.textContent = selectedEffort;
+		if (settingsSummary) settingsSummary.textContent = `${selectedModel} · ${selectedEffort}`;
+		modelOptionButtons?.forEach((button) => {
+			button.setAttribute('aria-checked', String(button.dataset.chatModelOption === modelSelect?.value));
+		});
+		reasoningOptionButtons?.forEach((button) => {
+			button.setAttribute('aria-checked', String(button.dataset.chatReasoningOption === reasoningSelect?.value));
+		});
+		settingsToggle?.setAttribute('aria-label', language === 'en'
+			? `AI settings. ${selectedModel}, ${selectedEffort} effort`
+			: `Configuración de IA. ${selectedModel}, esfuerzo ${selectedEffort}`);
+		updateCreditUi();
+	};
+
+	const restoreChatSettings = () => {
+		try {
+			const savedModel = localStorage.getItem('portfolio-chat-model');
+			const savedReasoning = localStorage.getItem('portfolio-chat-reasoning');
+			if (modelSelect && savedModel && allowedModels.includes(savedModel)) modelSelect.value = savedModel;
+			if (reasoningSelect && savedReasoning && allowedReasoning.includes(savedReasoning)) reasoningSelect.value = savedReasoning;
+		} catch {
+			// Defaults remain selected when storage is unavailable.
+		}
+	};
+
+	const setSettingsDisabled = (disabled: boolean) => {
+		if (modelSelect) modelSelect.disabled = disabled;
+		if (reasoningSelect) reasoningSelect.disabled = disabled;
+		if (settingsToggle) settingsToggle.disabled = disabled;
+		if (settingsReset) settingsReset.disabled = disabled;
+		settingsSectionButtons?.forEach((button) => { button.disabled = disabled; });
+		modelOptionButtons?.forEach((button) => { button.disabled = disabled; });
+		reasoningOptionButtons?.forEach((button) => { button.disabled = disabled; });
+		if (disabled) setSettingsOpen(false);
+	};
+
+	const setStatus = (message: string) => {
+		if (status) status.textContent = message;
+	};
+
+	const scrollToLatest = () => {
+		requestAnimationFrame(() => scrollRoot?.scrollTo({ top: scrollRoot.scrollHeight, behavior: 'smooth' }));
+	};
+
+	const renderInlineMarkdown = (element: HTMLElement, content: string) => {
+		const pattern = /\*\*([\s\S]+?)\*\*/g;
+		let cursor = 0;
+		let match: RegExpExecArray | null;
+
+		while ((match = pattern.exec(content)) !== null) {
+			if (match.index > cursor) element.append(document.createTextNode(content.slice(cursor, match.index)));
+			const strong = document.createElement('strong');
+			strong.className = 'font-extrabold';
+			strong.textContent = match[1];
+			element.append(strong);
+			cursor = match.index + match[0].length;
+		}
+
+		if (cursor < content.length) element.append(document.createTextNode(content.slice(cursor)));
+	};
+
+	const splitTableRow = (line: string) => line
+		.trim()
+		.replace(/^\|/, '')
+		.replace(/\|$/, '')
+		.split('|')
+		.map((cell) => cell.trim());
+
+	const isTableDivider = (line: string) => {
+		const cells = splitTableRow(line);
+		return cells.length > 0 && cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+	};
+
+	const appendTextBlock = (container: HTMLElement, lines: string[]) => {
+		if (!lines.length) return;
+		const block = document.createElement('p');
+		block.className = 'chat-markdown-block whitespace-pre-wrap';
+		renderInlineMarkdown(block, lines.join('\n'));
+		container.append(block);
+	};
+
+	const renderMarkdown = (element: HTMLElement, content: string) => {
+		element.replaceChildren();
+		const lines = content.replace(/\r\n?/g, '\n').split('\n');
+		let textLines: string[] = [];
+
+		const flushText = () => {
+			appendTextBlock(element, textLines);
+			textLines = [];
+		};
+
+		for (let index = 0; index < lines.length;) {
+			const hasTableHeader = lines[index].includes('|') && index + 1 < lines.length && isTableDivider(lines[index + 1]);
+			if (!hasTableHeader) {
+				textLines.push(lines[index]);
+				index += 1;
+				continue;
+			}
+
+			flushText();
+			const headers = splitTableRow(lines[index]);
+			index += 2;
+			const rows: string[][] = [];
+			while (index < lines.length && lines[index].includes('|') && lines[index].trim()) {
+				rows.push(splitTableRow(lines[index]));
+				index += 1;
+			}
+
+			const wrapper = document.createElement('div');
+			wrapper.className = 'chat-table-wrap';
+			const table = document.createElement('table');
+			table.className = 'chat-markdown-table';
+			const thead = document.createElement('thead');
+			const headerRow = document.createElement('tr');
+
+			headers.forEach((header) => {
+				const cell = document.createElement('th');
+				cell.scope = 'col';
+				renderInlineMarkdown(cell, header);
+				headerRow.append(cell);
+			});
+			thead.append(headerRow);
+			table.append(thead);
+
+			const tbody = document.createElement('tbody');
+			rows.forEach((row) => {
+				const tableRow = document.createElement('tr');
+				headers.forEach((_, cellIndex) => {
+					const cell = document.createElement('td');
+					renderInlineMarkdown(cell, row[cellIndex] || '');
+					tableRow.append(cell);
+				});
+				tbody.append(tableRow);
+			});
+			table.append(tbody);
+			wrapper.append(table);
+			element.append(wrapper);
+		}
+
+		flushText();
+	};
+
+	const expandConversation = () => {
+		if (!conversation?.classList.contains('hidden')) return;
+		conversation?.classList.remove('hidden');
+		conversation?.classList.add('chat-conversation-enter');
+		introExtras?.classList.add('hidden');
+		shell?.classList.add('chat-shell-active');
+	};
+
+	const collapseConversation = () => {
+		conversation?.classList.add('hidden');
+		conversation?.classList.remove('chat-conversation-enter');
+		introExtras?.classList.remove('hidden');
+		shell?.classList.remove('chat-shell-active');
+	};
+
+	const resetConversation = () => {
+		controller?.abort();
+		messages = [];
+		generating = false;
+		messagesRoot?.replaceChildren();
+		updateSubmitAvailability();
+		setSettingsDisabled(false);
+		if (scrollRoot) scrollRoot.scrollTop = 0;
+		setStatus('En línea');
+		collapseConversation();
+		input?.focus();
+	};
+
+	const addMessage = (role: Message['role'], content: string) => {
+		if (!messagesRoot) return null;
+		const wrapper = document.createElement('article');
+		wrapper.className = role === 'user' ? 'flex justify-end' : 'flex items-start gap-3';
+
+		if (role === 'assistant') {
+			const avatar = document.createElement('div');
+			avatar.className = 'mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-100 text-xs font-black text-sky-600 dark:bg-sky-950 dark:text-sky-300';
+			avatar.textContent = 'DG';
+			avatar.setAttribute('aria-hidden', 'true');
+			wrapper.append(avatar);
+		}
+
+		const bubble = document.createElement('div');
+		bubble.className = role === 'user'
+			? 'chat-user-bubble max-w-[92%] overflow-hidden rounded-2xl rounded-br-md bg-slate-950 px-4 py-3 leading-relaxed text-white sm:max-w-[82%]'
+			: 'chat-assistant-bubble max-w-[96%] overflow-hidden pt-1 leading-7 text-slate-700 dark:text-slate-200 sm:max-w-[92%]';
+		renderMarkdown(bubble, content);
+		wrapper.append(bubble);
+		messagesRoot.append(wrapper);
+		scrollToLatest();
+		return bubble;
+	};
+
+	const sendMessage = async (rawPrompt: string) => {
+		const prompt = rawPrompt.trim();
+		if (!prompt || generating || prompt.length > 1200) return;
+
+		expandConversation();
+		generating = true;
+		updateSubmitAvailability();
+		setSettingsDisabled(true);
+		if (input) {
+			input.value = '';
+			input.style.height = 'auto';
+		}
+
+		messages.push({ role: 'user', content: prompt });
+		addMessage('user', prompt);
+		const answerBubble = addMessage('assistant', '');
+		if (!answerBubble) return;
+		answerBubble.classList.add('chat-thinking');
+		setStatus('Escribiendo…');
+		controller = new AbortController();
+
+		try {
+			const response = await fetch('/api/chat', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					messages: messages.slice(-10),
+					model: modelSelect?.value || 'openai/gpt-oss-120b',
+				reasoningEffort: reasoningSelect?.value || 'medium',
+					language: document.documentElement.dataset.language === 'en' ? 'en' : 'es'
+				}),
+				signal: controller.signal
+			});
+			applyCreditHeaders(response);
+
+			if (!response.ok) {
+				const payload = await response.json().catch(() => null) as { error?: string } | null;
+				throw new Error(payload?.error || 'El asistente no pudo responder.');
+			}
+
+			if (!response.body) throw new Error('La respuesta llegó vacía.');
+			answerBubble.classList.remove('chat-thinking');
+			const reader = response.body.getReader();
+			const decoder = new TextDecoder();
+			let answer = '';
+
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+				answer += decoder.decode(value, { stream: true });
+				renderMarkdown(answerBubble, answer);
+				scrollToLatest();
+			}
+
+			answer += decoder.decode();
+			if (!answer.trim()) throw new Error('La respuesta llegó vacía.');
+			renderMarkdown(answerBubble, answer);
+			messages.push({ role: 'assistant', content: answer });
+		} catch (error) {
+			answerBubble.classList.remove('chat-thinking');
+			if (error instanceof DOMException && error.name === 'AbortError') {
+				renderMarkdown(answerBubble, 'Respuesta detenida.');
+			} else {
+				renderMarkdown(
+					answerBubble,
+					error instanceof Error ? error.message : 'El asistente no pudo responder en este momento.'
+				);
+			}
+		} finally {
+			generating = false;
+			controller = null;
+			updateSubmitAvailability();
+			setSettingsDisabled(false);
+			setStatus('En línea');
+			input?.focus();
+			scrollToLatest();
+		}
+	};
+
+	restoreChatSettings();
+	updateSettingsUi();
+	void loadCreditBalance();
+	settingsToggle?.addEventListener('click', () => {
+		const shouldOpen = settingsToggle.getAttribute('aria-expanded') !== 'true';
+		setSettingsSubmenu(null);
+		setSettingsOpen(shouldOpen);
+	});
+	settingsSectionButtons?.forEach((button) => {
+		button.addEventListener('mouseenter', () => {
+			if (settingsMenu?.hidden) return;
+			setSettingsSubmenu(button.dataset.chatSettingsSection || null);
+		});
+		button.addEventListener('click', () => {
+			const section = button.dataset.chatSettingsSection || null;
+			setSettingsSubmenu(section);
+			const submenu = Array.from(settingsSubmenus || []).find((item) => item.dataset.chatSettingsSubmenu === section);
+			submenu?.querySelector<HTMLButtonElement>('button')?.focus();
+		});
+	});
+	modelOptionButtons?.forEach((button) => {
+		button.addEventListener('click', () => {
+			if (!modelSelect || !button.dataset.chatModelOption) return;
+			modelSelect.value = button.dataset.chatModelOption;
+			try { localStorage.setItem('portfolio-chat-model', modelSelect.value); } catch { /* Keep the active selection for this page. */ }
+			updateSettingsUi();
+		});
+	});
+	reasoningOptionButtons?.forEach((button) => {
+		button.addEventListener('click', () => {
+			if (!reasoningSelect || !button.dataset.chatReasoningOption) return;
+			reasoningSelect.value = button.dataset.chatReasoningOption;
+			try { localStorage.setItem('portfolio-chat-reasoning', reasoningSelect.value); } catch { /* Keep the active selection for this page. */ }
+			updateSettingsUi();
+		});
+	});
+	settingsReset?.addEventListener('click', () => {
+		if (modelSelect) modelSelect.value = 'openai/gpt-oss-120b';
+		if (reasoningSelect) reasoningSelect.value = 'medium';
+		try {
+			localStorage.removeItem('portfolio-chat-model');
+			localStorage.removeItem('portfolio-chat-reasoning');
+		} catch {
+			// Defaults still apply for the current page.
+		}
+		updateSettingsUi();
+		setSettingsOpen(false);
+		settingsToggle?.focus();
+	});
+
+	const closeSettingsFromOutside = (event: PointerEvent) => {
+		if (settingsMenu?.hidden || settingsRoot?.contains(event.target as Node)) return;
+		setSettingsOpen(false);
+	};
+	const closeSettingsWithKeyboard = (event: KeyboardEvent) => {
+		if (event.key !== 'Escape' || settingsMenu?.hidden) return;
+		setSettingsOpen(false);
+		settingsToggle?.focus();
+	};
+	document.addEventListener('pointerdown', closeSettingsFromOutside);
+	document.addEventListener('keydown', closeSettingsWithKeyboard);
+	window.addEventListener('portfolio-language-change', updateSettingsUi);
+
+	resetButton?.addEventListener('click', resetConversation);
+	form?.addEventListener('submit', (event) => {
+		event.preventDefault();
+		void sendMessage(input?.value || '');
+	});
+	input?.addEventListener('input', () => {
+		input.style.height = 'auto';
+		input.style.height = `${Math.min(input.scrollHeight, 128)}px`;
+		updateSubmitAvailability();
+	});
+	input?.addEventListener('keydown', (event) => {
+		if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+			event.preventDefault();
+			form?.requestSubmit();
+		}
+	});
+	suggestionButtons?.forEach((button) => {
+		button.addEventListener('click', () => {
+			const prompt = document.documentElement.dataset.language === 'en' ? button.dataset.promptEn : button.dataset.promptEs;
+			void sendMessage(prompt || '');
+		});
+	});
+	document.addEventListener('astro:before-swap', () => {
+		controller?.abort();
+		document.removeEventListener('pointerdown', closeSettingsFromOutside);
+		document.removeEventListener('keydown', closeSettingsWithKeyboard);
+		window.removeEventListener('portfolio-language-change', updateSettingsUi);
+	}, { once: true });
+</script>
+
+<style is:global>
+	.chat-grid {
+		background-image:
+			linear-gradient(to right, rgb(15 23 42 / 4%) 1px, transparent 1px),
+			linear-gradient(to bottom, rgb(15 23 42 / 4%) 1px, transparent 1px);
+		background-size: 48px 48px;
+		mask-image: linear-gradient(to bottom, black, transparent 94%);
+	}
+
+	[data-theme="dark"] .chat-grid {
+		background-image:
+			linear-gradient(to right, rgb(255 255 255 / 5%) 1px, transparent 1px),
+			linear-gradient(to bottom, rgb(255 255 255 / 5%) 1px, transparent 1px);
+	}
+
+	.chat-gradient-text {
+		background: linear-gradient(100deg, #0ea5e9 0%, #3b82f6 44%, #8b5cf6 100%);
+		background-clip: text;
+		-webkit-background-clip: text;
+		color: transparent;
+	}
+
+	.chat-shell { position: relative; }
+
+	.chat-shell::before {
+		content: '';
+		position: absolute;
+		inset: -1px -1px auto;
+		height: 2px;
+		background: linear-gradient(90deg, transparent, #0ea5e9, #8b5cf6, transparent);
+		opacity: 0.72;
+		pointer-events: none;
+	}
+
+	.chat-shell-active { box-shadow: 0 28px 90px rgb(15 23 42 / 14%); }
+	.chat-shell-active [data-chat-form] { border-radius: 0 0 1.55rem 1.55rem; }
+
+	.chat-chevron {
+		display: inline-block;
+		width: 0.45rem;
+		height: 0.45rem;
+		flex: 0 0 auto;
+		border-right: 1.5px solid currentColor;
+		border-bottom: 1.5px solid currentColor;
+		color: rgb(148 163 184);
+	}
+
+	.chat-chevron-right { transform: rotate(-45deg); }
+	.chat-chevron-down { transform: rotate(45deg) translateY(-1px); }
+
+	[data-chat-settings-root] {
+		--chat-settings-width: min(18rem, calc(100vw - 7rem));
+	}
+
+	.chat-settings-menu { width: var(--chat-settings-width); }
+
+	.chat-settings-toggle {
+		width: min(14rem, var(--chat-settings-width));
+		transition: width 220ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease, border-color 180ms ease, opacity 180ms ease;
+	}
+
+	.chat-settings-toggle[aria-expanded="true"] { width: var(--chat-settings-width); }
+	.chat-settings-toggle[aria-expanded="true"] .chat-chevron-down { transform: rotate(225deg) translateY(-1px); }
+
+	@media (min-width: 640px) {
+		[data-chat-settings-root] { --chat-settings-width: 18rem; }
+	}
+
+	.chat-check {
+		display: inline-block;
+		width: 0.65rem;
+		height: 0.35rem;
+		border-left: 1.75px solid currentColor;
+		border-bottom: 1.75px solid currentColor;
+		color: rgb(14 165 233);
+		opacity: 0;
+		transform: rotate(-45deg) translateY(-1px);
+	}
+
+	[aria-checked="true"] .chat-check { opacity: 1; }
+
+	.chat-send-icon {
+		position: relative;
+		display: block;
+		width: 1rem;
+		height: 1rem;
+		margin: auto;
+	}
+
+	.chat-send-icon::before {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 0.08rem;
+		width: 0.48rem;
+		height: 0.48rem;
+		border-top: 2px solid currentColor;
+		border-left: 2px solid currentColor;
+		transform: translateX(-50%) rotate(45deg);
+	}
+
+	.chat-send-icon::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 0.2rem;
+		bottom: 0.02rem;
+		width: 2px;
+		border-radius: 999px;
+		background: currentColor;
+		transform: translateX(-50%);
+	}
+
+	.chat-markdown-block + .chat-markdown-block,
+	.chat-table-wrap + .chat-markdown-block,
+	.chat-markdown-block + .chat-table-wrap { margin-top: 0.85rem; }
+
+	.chat-table-wrap {
+		max-width: 100%;
+		overflow-x: auto;
+		border-radius: 0.85rem;
+	}
+
+	.chat-markdown-table {
+		width: 100%;
+		min-width: 580px;
+		border-collapse: separate;
+		border-spacing: 0;
+		border: 1px solid rgb(203 213 225);
+		background: white;
+		font-size: 0.875rem;
+		line-height: 1.45;
+	}
+
+	.chat-markdown-table th,
+	.chat-markdown-table td {
+		padding: 0.7rem 0.8rem;
+		border-right: 1px solid rgb(226 232 240);
+		border-bottom: 1px solid rgb(226 232 240);
+		text-align: left;
+		vertical-align: top;
+	}
+
+	.chat-markdown-table th:last-child,
+	.chat-markdown-table td:last-child { border-right: 0; }
+	.chat-markdown-table tbody tr:last-child td { border-bottom: 0; }
+	.chat-markdown-table th { background: rgb(241 245 249); color: rgb(15 23 42); font-weight: 800; }
+	.chat-markdown-table tbody tr:nth-child(even) { background: rgb(248 250 252); }
+
+	[data-theme="dark"] .chat-markdown-table {
+		border-color: rgb(51 65 85);
+		background: rgb(2 6 23);
+	}
+
+	[data-theme="dark"] .chat-markdown-table th,
+	[data-theme="dark"] .chat-markdown-table td {
+		border-color: rgb(30 41 59);
+	}
+
+	[data-theme="dark"] .chat-markdown-table th { background: rgb(15 23 42); color: rgb(248 250 252); }
+	[data-theme="dark"] .chat-markdown-table tbody tr:nth-child(even) { background: rgb(15 23 42 / 55%); }
+
+	.chat-user-bubble .chat-markdown-table { color: rgb(15 23 42); }
+
+	[data-chat-input]:focus-visible {
+		outline: none;
+		outline-offset: 0;
+	}
+
+	.chat-conversation-enter { animation: chat-expand 360ms cubic-bezier(0.22, 1, 0.36, 1); }
+
+	.chat-thinking::after {
+		content: '';
+		display: inline-block;
+		width: 1.6rem;
+		height: 0.6rem;
+		background: radial-gradient(circle closest-side, #38bdf8 90%, transparent) 0 50% / 0.4rem 0.4rem repeat-x;
+		animation: chat-dots 1s infinite linear;
+	}
+
+	@keyframes chat-expand {
+		from { opacity: 0; transform: translateY(-8px); max-height: 0; }
+		to { opacity: 1; transform: none; max-height: 520px; }
+	}
+
+	@keyframes chat-dots {
+		to { background-position: 0.8rem 50%; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.chat-conversation-enter { animation: none; }
+	}
+</style>
