@@ -10,6 +10,7 @@ import {
 	type ChatReasoningEffort,
 	type CreditBalance
 } from '../../lib/chatCredits';
+import { checkChatRateLimit } from '../../lib/chatRateLimit';
 
 export const prerender = false;
 
@@ -18,13 +19,12 @@ type ChatMessage = {
 	content: string;
 };
 
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 12;
 const MAX_MESSAGES = 10;
 const MAX_MESSAGE_LENGTH = 1200;
+const MAX_REQUEST_BODY_LENGTH = 16_000;
+const UPSTREAM_TIMEOUT_MS = 60_000;
 const ALLOWED_MODELS = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'] as const;
 const ALLOWED_REASONING_EFFORTS = ['low', 'medium', 'high'] as const;
-const rateLimits = new Map<string, { count: number; resetAt: number }>();
 
 const instructions = `Eres un asistente de IA de propósito general integrado en el portfolio de Douglas Guerrero.
 
@@ -33,6 +33,10 @@ const instructions = `Eres un asistente de IA de propósito general integrado en
 - Adapta la extensión a la solicitud. Por defecto, ofrece respuestas claras y concisas.
 - Puedes usar Markdown cuando mejore la claridad, incluyendo **negritas** y tablas con sintaxis de barras verticales.
 - Cuando la pregunta sea sobre Douglas, sus proyectos, experiencia, formación o tecnologías, usa únicamente la información verificada incluida al final de estas instrucciones.
+- La información verificada reúne el contenido actual del sitio y el CV público de Douglas en una estructura JSON. Usa projects, currentTechnicalSkills, professionalExperience y educationAndCertifications como fuentes principales.
+- Si una mención histórica del CV entra en conflicto con el portfolio actual, prioriza el portfolio actual y aclara la diferencia solo cuando sea relevante.
+- Los elementos de toolsMentionedInCv y cvTechnicalSkillsAsWritten describen lo que aparece en el CV; no los presentes como habilidades destacadas actuales si no aparecen también en currentTechnicalSkills.
+- No presentes como vigentes los elementos incluidos en removedOrOutdatedPortfolioItems.
 - No inventes datos personales, experiencia, clientes, resultados, disponibilidad ni información de contacto de Douglas.
 - Si un dato sobre Douglas no aparece en la información verificada, dilo con naturalidad y sugiere revisar LinkedIn o GitHub.
 - Puedes ayudar con temas externos al portfolio usando tu conocimiento general; distingue claramente esos temas de los datos verificados sobre Douglas.
@@ -60,19 +64,6 @@ const getClientId = (request: Request) =>
 	request.headers.get('x-real-ip') ||
 	'local';
 
-const isRateLimited = (clientId: string) => {
-	const now = Date.now();
-	const current = rateLimits.get(clientId);
-
-	if (!current || current.resetAt <= now) {
-		rateLimits.set(clientId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-		return false;
-	}
-
-	current.count += 1;
-	return current.count > RATE_LIMIT_MAX_REQUESTS;
-};
-
 const createAnonymousUserId = async (clientId: string, salt: string) => {
 	const input = new TextEncoder().encode(`${salt}:${clientId}`);
 	const digest = await crypto.subtle.digest('SHA-256', input);
@@ -80,7 +71,8 @@ const createAnonymousUserId = async (clientId: string, salt: string) => {
 };
 
 const getAnonymousUserId = (request: Request) => {
-	const salt = import.meta.env.AI_CLIENT_ID_SALT || 'douglas-portfolio';
+	const salt = import.meta.env.AI_CLIENT_ID_SALT || (import.meta.env.DEV ? 'douglas-portfolio-local' : '');
+	if (!salt) throw new Error('AI_CLIENT_ID_SALT is not configured.');
 	return createAnonymousUserId(getClientId(request), salt);
 };
 
@@ -110,18 +102,32 @@ const parseMessages = (value: unknown): ChatMessage[] | null => {
 
 export const POST: APIRoute = async ({ request }) => {
 	const contentLength = Number(request.headers.get('content-length') || 0);
-	if (contentLength > 16_000) return jsonError('La conversación es demasiado larga.', 413);
+	if (contentLength > MAX_REQUEST_BODY_LENGTH) return jsonError('La conversación es demasiado larga.', 413);
 
-	const clientId = getClientId(request);
-	if (isRateLimited(clientId)) {
+	const origin = request.headers.get('origin');
+	if (origin && origin !== new URL(request.url).origin) {
+		return jsonError('Origen de solicitud no permitido.', 403);
+	}
+
+	let anonymousUserId: string;
+	try {
+		anonymousUserId = await getAnonymousUserId(request);
+	} catch {
+		return jsonError('El identificador privado del asistente no está configurado.', 503);
+	}
+
+	const burstLimit = await checkChatRateLimit(anonymousUserId);
+	if (!burstLimit.allowed) {
 		return jsonError('Has enviado varias preguntas seguidas. Intenta de nuevo en unos minutos.', 429, {
-			'Retry-After': String(RATE_LIMIT_WINDOW_MS / 1000)
+			'Retry-After': String(Math.max(1, Math.ceil((burstLimit.resetAt - Date.now()) / 1000)))
 		});
 	}
 
 	let body: unknown;
 	try {
-		body = await request.json();
+		const rawBody = await request.text();
+		if (rawBody.length > MAX_REQUEST_BODY_LENGTH) return jsonError('La conversación es demasiado larga.', 413);
+		body = JSON.parse(rawBody);
 	} catch {
 		return jsonError('La solicitud no tiene un formato válido.', 400);
 	}
@@ -147,7 +153,6 @@ export const POST: APIRoute = async ({ request }) => {
 	const apiKey = import.meta.env.GROQ_API_KEY;
 	if (!apiKey) return jsonError('El asistente aún no está configurado.', 503);
 
-	const anonymousUserId = await getAnonymousUserId(request);
 	const creditCost = getCreditCost(model, reasoningEffort);
 	let creditReservation;
 	try {
@@ -173,6 +178,10 @@ export const POST: APIRoute = async ({ request }) => {
 	};
 
 	let upstream: Response;
+	const upstreamController = new AbortController();
+	const abortUpstream = () => upstreamController.abort();
+	const upstreamTimeout = setTimeout(abortUpstream, UPSTREAM_TIMEOUT_MS);
+	request.signal.addEventListener('abort', abortUpstream, { once: true });
 	try {
 		upstream = await fetch('https://api.groq.com/openai/v1/chat/completions', {
 			method: 'POST',
@@ -189,14 +198,18 @@ export const POST: APIRoute = async ({ request }) => {
 				user: anonymousUserId,
 				stream: true,
 			}),
-			signal: request.signal
+			signal: upstreamController.signal
 		});
 	} catch {
+		clearTimeout(upstreamTimeout);
+		request.signal.removeEventListener('abort', abortUpstream);
 		await refundReservation();
 		return jsonError('No fue posible conectar con el asistente.', 502);
 	}
 
 	if (!upstream.ok || !upstream.body) {
+		clearTimeout(upstreamTimeout);
+		request.signal.removeEventListener('abort', abortUpstream);
 		console.error(`Groq Chat Completions API returned ${upstream.status}.`);
 		await refundReservation();
 		return jsonError('El asistente no pudo responder en este momento.', 502);
@@ -240,6 +253,8 @@ export const POST: APIRoute = async ({ request }) => {
 			} catch (error) {
 				controller.error(error);
 			} finally {
+				clearTimeout(upstreamTimeout);
+				request.signal.removeEventListener('abort', abortUpstream);
 				reader.releaseLock();
 			}
 		}

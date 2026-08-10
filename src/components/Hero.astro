@@ -1,20 +1,21 @@
 ---
 import { Image } from 'astro:assets';
 import profilePhoto from '../assets/douglas-profile.jpg';
+import profilePhotoLight from '../assets/douglas-profile-light.jpeg';
 ---
 
-<section class="relative isolate overflow-hidden border-b border-slate-200 bg-white transition-colors dark:border-slate-800 dark:bg-slate-950" aria-labelledby="hero-title">
-	<div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_84%_28%,rgba(56,189,248,0.12),transparent_27%)] dark:bg-[radial-gradient(circle_at_84%_28%,rgba(56,189,248,0.08),transparent_30%)]" aria-hidden="true"></div>
+<section class="relative isolate overflow-hidden border-b border-slate-300 bg-slate-100 transition-colors dark:border-slate-800 dark:bg-slate-950" aria-labelledby="hero-title">
+	<div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_84%_28%,rgba(56,189,248,0.12),transparent_27%),radial-gradient(circle_at_88%_78%,rgba(245,158,11,0.16),transparent_30%)] dark:bg-[radial-gradient(circle_at_84%_28%,rgba(56,189,248,0.08),transparent_30%),radial-gradient(circle_at_88%_78%,rgba(245,158,11,0.11),transparent_32%)]" aria-hidden="true"></div>
 
 	<div class="mx-auto grid min-h-[650px] w-full max-w-[1160px] items-center gap-12 px-6 py-16 sm:px-8 lg:grid-cols-[1.18fr_0.82fr] lg:gap-16 lg:py-20">
-		<div class="relative z-10 max-w-2xl">
+		<div data-reveal data-reveal-origin="left" class="relative z-10 max-w-2xl">
 			<p class="text-sm font-bold uppercase tracking-[0.24em] text-sky-500" data-i18n-es="Hola, mi nombre es" data-i18n-en="Hi, my name is">Hola, mi nombre es</p>
-			<h1 id="hero-title" class="mt-4 text-5xl font-extrabold leading-[1.02] tracking-[-0.05em] text-slate-950 dark:text-white sm:text-6xl lg:text-7xl">
+			<h1 id="hero-title" class="mt-4 text-4xl font-extrabold leading-[1.04] tracking-[-0.045em] text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
 				Douglas Guerrero
 			</h1>
 
-			<p class="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-slate-700 dark:text-slate-200 sm:text-xl">
-				Software Engineer <span class="text-sky-500">|</span> Backend Developer <span class="text-sky-500">|</span> Java, Spring Boot, Node.js <span class="text-sky-500">|</span> Angular, Next.js <span class="text-sky-500">|</span> PostgreSQL, Docker &amp; AWS
+			<p class="mt-5 max-w-2xl text-sm font-semibold leading-relaxed text-slate-700 dark:text-slate-200 sm:text-base">
+				Fullstack Developer <span class="text-sky-500">|</span> Backend Developer <span class="text-sky-500">|</span> Java, Spring Boot, Node.js <span class="text-sky-500">|</span> Angular, Next.js <span class="text-sky-500">|</span> PostgreSQL, Docker &amp; AWS
 			</p>
 
 			<div class="mt-8 flex flex-wrap gap-3">
@@ -31,25 +32,55 @@ import profilePhoto from '../assets/douglas-profile.jpg';
 			</div>
 
 			<p class="mt-9 max-w-xl text-lg leading-8 text-slate-500 dark:text-slate-400 sm:text-xl sm:leading-9">
-				<span data-language-copy="es">Construyo aplicaciones web y empresariales con foco en <strong class="font-bold text-slate-900 dark:text-white">backends robustos</strong>, APIs claras y experiencias frontend eficientes. Convierto requerimientos complejos en <strong class="font-bold text-slate-900 dark:text-white">software mantenible</strong> y preparado para crecer.</span>
-				<span data-language-copy="en" hidden>I build web and enterprise applications focused on <strong class="font-bold text-slate-900 dark:text-white">robust backends</strong>, clear APIs, and efficient frontend experiences. I turn complex requirements into <strong class="font-bold text-slate-900 dark:text-white">maintainable software</strong> designed to scale.</span>
+				<span data-language-copy="es">Soy <strong class="font-bold text-slate-900 dark:text-white">Ingeniero de Sistemas</strong>, vivo en <strong class="font-bold text-slate-900 dark:text-white">Cartagena, Colombia</strong>, tengo 25 años y más de <strong class="font-bold text-slate-900 dark:text-white">3 años construyendo aplicaciones web</strong> y soluciones empresariales. En mi tiempo libre, disfruto montar bicicleta y hacer ejercicio.</span>
+				<span data-language-copy="en" hidden>I am a <strong class="font-bold text-slate-900 dark:text-white">Systems Engineer</strong> based in <strong class="font-bold text-slate-900 dark:text-white">Cartagena, Colombia</strong>. I am 25 years old and have more than <strong class="font-bold text-slate-900 dark:text-white">3 years of experience building web applications</strong> and enterprise solutions. In my free time, I enjoy cycling and working out.</span>
 			</p>
 		</div>
 
-		<div class="mx-auto w-full max-w-[440px] lg:mx-0 lg:justify-self-end">
+		<div data-reveal data-reveal-origin="right" data-reveal-delay="120" class="mx-auto w-full max-w-[440px] lg:mx-0 lg:justify-self-end">
 			<div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] border border-slate-300 bg-slate-100 p-3 shadow-[0_24px_70px_rgba(15,23,42,0.13)] transition-colors dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_24px_70px_rgba(0,0,0,0.4)]">
 				<div class="h-full w-full overflow-hidden rounded-[1.35rem]">
 					<Image
-						src={profilePhoto}
-						alt="Douglas Guerrero, ingeniero de software y desarrollador backend"
-						class="h-full w-full origin-top scale-[1.18] object-cover object-top"
+						src={profilePhotoLight}
+						alt="Douglas Guerrero, desarrollador full-stack y backend"
+						data-hero-photo="light"
+						class="h-full w-full scale-[1.18] object-cover object-top"
 						widths={[320, 440, 640]}
 						sizes="(min-width: 1024px) 440px, min(100vw - 48px, 440px)"
-						loading="eager"
-						fetchpriority="high"
+						priority
+					/>
+					<Image
+						src={profilePhoto}
+						alt="Douglas Guerrero, desarrollador full-stack y backend"
+						data-hero-photo="dark"
+						class="h-full w-full scale-[1.18] object-cover object-top"
+						widths={[320, 440, 640]}
+						sizes="(min-width: 1024px) 440px, min(100vw - 48px, 440px)"
+						loading="lazy"
+						fetchpriority="low"
 					/>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
+
+<style is:global>
+	img[data-hero-photo='light'] {
+		display: block;
+		transform-origin: 50% 48%;
+	}
+
+	img[data-hero-photo='dark'] {
+		display: none;
+		transform-origin: 50% 0;
+	}
+
+	html[data-theme='dark'] img[data-hero-photo='light'] {
+		display: none;
+	}
+
+	html[data-theme='dark'] img[data-hero-photo='dark'] {
+		display: block;
+	}
+</style>

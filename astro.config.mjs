@@ -7,10 +7,6 @@ export default defineConfig({
 	output: 'server',
 	adapter: node({ mode: 'standalone' }),
   vite: {
-    plugins: [tailwindcss()],
-    build: {
-      // Three.js is intentionally isolated in the interactive hero.
-      chunkSizeWarningLimit: 600
-    }
+	plugins: [tailwindcss()]
   }
 });

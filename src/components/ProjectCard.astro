@@ -1,28 +1,78 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 
 const { project } = Astro.props;
+const modalImage = await getImage({
+	src: project.image,
+	width: 1400,
+	format: 'webp',
+	quality: 82
+});
 ---
 
-<article class="z-10 flex w-[47%] flex-col justify-between gap-8 overflow-hidden rounded-2xl p-8 pb-0 shadow-[0_20px_50px_rgba(15,23,42,0.12)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_26px_65px_rgba(15,23,42,0.18)] max-md:w-full" style={`background: ${project.gradient}`}>
-	<div class="flex flex-col text-white">
-		<div class="flex justify-between gap-5">
-			<div class="flex flex-col justify-between">
-				<p class="font-semibold max-sm:text-sm" data-i18n-es={project.category} data-i18n-en={project.categoryEn}>{project.category}</p>
-				<h3 class="text-2xl font-bold max-sm:text-xl">{project.name}</h3>
-			</div>
-			<a href="https://github.com/douglasd11" target="_blank" rel="noopener noreferrer" class="flex h-[50px] w-[50px] min-w-[50px] items-center justify-center rounded-full bg-white/30 transition-transform hover:scale-105" aria-label={`Ver el perfil de GitHub relacionado con ${project.name}`}>
-				<img class="h-[25px] w-[25px]" src="/icon_github.png" alt="" width="25" height="25" />
-			</a>
-		</div>
-		<p class="py-4 pr-3" data-i18n-es={project.description} data-i18n-en={project.descriptionEn}>{project.description}</p>
+<article
+	data-project-card
+	data-project-name={project.name}
+	data-project-category={project.category}
+	data-project-category-en={project.categoryEn}
+	data-project-description={project.description}
+	data-project-description-en={project.descriptionEn}
+	data-project-technologies={project.technologies.join('|')}
+	data-project-link={project.link ?? ''}
+	data-project-image={modalImage.src}
+	class="project-card group/card flex h-full w-full cursor-pointer select-none flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-900 transition duration-300 hover:-translate-y-1 hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 dark:border-slate-700/80 dark:bg-slate-900 dark:text-white dark:hover:border-slate-600 dark:focus-visible:ring-offset-slate-950"
+	tabindex="0"
+	role="button"
+	aria-label={`Ver detalles de ${project.name}`}
+>
+	<div class="aspect-[1.9/1] w-full overflow-hidden bg-slate-100 dark:bg-slate-950">
+		<Image
+			class="pointer-events-none h-full w-full select-none object-cover object-top transition-transform duration-500 ease-out group-hover/card:scale-[1.025]"
+			src={project.image}
+			alt={`Vista del proyecto ${project.name}`}
+			widths={[480, 720, 960]}
+			sizes="(min-width: 1024px) 370px, (min-width: 640px) 50vw, calc(100vw - 48px)"
+			format="webp"
+			loading="lazy"
+			draggable="false"
+		/>
 	</div>
 
-	{project.link ? (
-		<a href={project.link} target="_blank" rel="noopener noreferrer" aria-label={`Abrir proyecto ${project.name}`}>
-			<Image class="w-full" src={project.image} alt={`Vista del proyecto ${project.name}`} widths={[480, 720, 960]} sizes="(max-width: 768px) 100vw, 550px" format="webp" loading="lazy" />
-		</a>
-	) : (
-		<Image class="w-full" src={project.image} alt={`Vista del proyecto ${project.name}`} widths={[480, 720, 960]} sizes="(max-width: 768px) 100vw, 550px" format="webp" loading="lazy" />
-	)}
+	<div class="flex min-h-[10.5rem] flex-1 flex-col px-5 py-5 sm:px-6">
+		<h3 class="text-center text-lg font-bold leading-tight tracking-wide text-slate-900 dark:text-slate-50 sm:text-xl">
+			{project.name}
+		</h3>
+
+		<div class="project-description-window mt-2.5">
+			<p
+				class="project-description text-center text-sm leading-5 text-slate-500 dark:text-slate-400"
+				data-i18n-es={project.description}
+				data-i18n-en={project.descriptionEn}
+			>
+				{project.description}
+			</p>
+		</div>
+
+		<ul class="mt-auto block min-h-5 overflow-hidden text-ellipsis whitespace-nowrap pt-4 text-xs font-bold text-slate-700 dark:text-slate-200" aria-label="Tecnologías del proyecto">
+			{project.technologies.map((technology: string) => <li class="mr-4 inline last:mr-0">{technology}</li>)}
+		</ul>
+	</div>
 </article>
+
+<style>
+	.project-description-window {
+		height: 2.5rem;
+		overflow: hidden;
+		clip-path: inset(0);
+		contain: paint;
+	}
+
+	.project-description {
+		display: -webkit-box;
+		max-height: 2.5rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+	}
+</style>

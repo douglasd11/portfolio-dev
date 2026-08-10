@@ -1,20 +1,154 @@
 ---
-import { Image } from 'astro:assets';
+import graduationPrincipal from '../assets/graduation/graduacion-douglas-principal.webp';
+import graduationOne from '../assets/graduation/graduacion-douglas-1.webp';
+import graduationTwo from '../assets/graduation/graduacion-douglas-2.webp';
+import graduationThree from '../assets/graduation/graduacion-douglas-3.webp';
+import graduationFour from '../assets/graduation/graduacion-douglas-4.webp';
+import graduationFive from '../assets/graduation/graduacion-douglas-5.webp';
 
 const { certificate } = Astro.props;
+const accentStyle = `--certificate-accent: ${certificate.accent}`;
+const graduationImages = [
+	{ src: graduationPrincipal.src, position: 'center 42%' },
+	{ src: graduationOne.src, position: 'center 46%' },
+	{ src: graduationTwo.src, position: 'center 40%' },
+	{ src: graduationThree.src, position: 'center 50%' },
+	{ src: graduationFour.src, position: 'center 48%' },
+	{ src: graduationFive.src, position: 'center 35%' }
+];
 ---
 
-<article class:list={["z-10 flex w-2/5 flex-col border-t-2 border-slate-950 pt-3 text-slate-950 dark:border-white dark:text-white max-sm:w-full", certificate.position]}>
-	<div class="flex justify-between pb-8">
-		<div class="flex flex-col text-base font-bold">
-			<h3 class="font-semibold">{certificate.institution}</h3>
-			<p data-i18n-es={certificate.title} data-i18n-en={certificate.titleEn}>{certificate.title}</p>
-		</div>
-		<a href={certificate.pdf} target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-full bg-sky-500" aria-label={`Abrir certificado: ${certificate.title}`}>
-			<img class="h-9 w-9" src="/maki_arrow.png" alt="" width="36" height="36" />
-		</a>
-	</div>
-	<a class="w-full" href={certificate.pdf} target="_blank" rel="noopener noreferrer" aria-label={`Ver certificado: ${certificate.title}`}>
-		<Image class="h-80 w-full object-cover" src={certificate.image} alt={`Certificado de ${certificate.institution}`} widths={[480, 720]} sizes="(max-width: 640px) 100vw, 460px" format="webp" loading="lazy" />
-	</a>
-</article>
+{
+	certificate.featured ? (
+		<article
+			data-reveal-item
+			class="featured-certificate relative col-span-full min-h-[13rem] overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-5 pr-16 text-slate-950 dark:border-slate-700 dark:bg-slate-800/70 dark:text-white sm:min-h-[15.25rem] sm:p-6 sm:pr-16"
+			style={accentStyle}
+		>
+			<a
+				href={certificate.pdf}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="group absolute right-4 top-4 z-20 grid h-9 w-9 place-items-center rounded-full bg-slate-900 transition hover:bg-sky-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 dark:bg-slate-700 dark:hover:bg-sky-500 dark:focus-visible:ring-offset-slate-900"
+				aria-label={`Abrir diploma: ${certificate.title}`}
+			>
+				<img class="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" src="/maki_arrow.png" alt="" width="16" height="16" />
+			</a>
+			<div class="relative z-10 flex min-h-[10rem] w-full items-center gap-5 sm:min-h-[12.25rem] sm:w-[60%]">
+				<div class="certificate-badge grid h-20 w-20 shrink-0 place-items-center p-1 sm:h-24 sm:w-24" aria-hidden="true">
+					<img class="h-full w-full object-contain" src={certificate.logo.src} alt="" width="96" height="96" loading="lazy" decoding="async" />
+				</div>
+				<div class="min-w-0 flex-1">
+					<p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400" data-i18n-es={certificate.type} data-i18n-en={certificate.typeEn}>{certificate.type}</p>
+					<h3 class="mt-2 text-xl font-bold tracking-[-0.025em] sm:text-2xl" data-i18n-es={certificate.title} data-i18n-en={certificate.titleEn}>{certificate.title}</h3>
+					<p class="mt-1 text-sm font-semibold text-sky-600 dark:text-sky-400">{certificate.institution}</p>
+					<p class="mt-2 text-sm text-slate-500 dark:text-slate-400" data-i18n-es={certificate.period} data-i18n-en={certificate.periodEn}>{certificate.period}</p>
+				</div>
+			</div>
+			<degree-photo-gallery data-gallery-images={JSON.stringify(graduationImages)} class="certificate-gallery pointer-events-none absolute inset-y-0 right-0 hidden w-[40%] select-none overflow-hidden sm:block" aria-hidden="true">
+				<img data-certificate-slide data-active="true" class="absolute inset-0 h-full w-full object-cover" style={`object-position: ${graduationImages[0].position};`} src={graduationImages[0].src} alt="" width="1200" height="1600" loading="lazy" decoding="async" draggable="false" />
+				<img data-certificate-slide class="absolute inset-0 h-full w-full object-cover" alt="" width="1200" height="1600" decoding="async" draggable="false" />
+			</degree-photo-gallery>
+		</article>
+	) : (
+		<article
+			data-reveal-item
+			class="certificate-card flex min-h-36 flex-col rounded-2xl border border-slate-200 bg-slate-50 p-5 text-slate-950 dark:border-slate-700 dark:bg-slate-800/70 dark:text-white"
+			style={accentStyle}
+		>
+			<div class="flex items-center justify-between gap-3">
+				<div class="flex min-w-0 items-center gap-2.5">
+					<span class="certificate-dot h-2 w-2 shrink-0 rounded-full" aria-hidden="true"></span>
+					<p class="truncate text-xs font-bold text-slate-500 dark:text-slate-400">{certificate.institution}</p>
+				</div>
+				<a
+					href={certificate.pdf}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="group grid h-8 w-8 shrink-0 place-items-center rounded-full bg-slate-900 transition hover:bg-sky-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 dark:bg-slate-700 dark:hover:bg-sky-500 dark:focus-visible:ring-offset-slate-900"
+					aria-label={`Abrir certificado: ${certificate.title}`}
+				>
+					<img class="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" src="/maki_arrow.png" alt="" width="14" height="14" />
+				</a>
+			</div>
+			<h3 class="mt-4 text-base font-bold leading-snug" data-i18n-es={certificate.title} data-i18n-en={certificate.titleEn}>{certificate.title}</h3>
+			<p class="mt-auto pt-3 text-xs text-slate-500 dark:text-slate-400" data-i18n-es={certificate.type} data-i18n-en={certificate.typeEn}>{certificate.type}</p>
+		</article>
+	)
+}
+
+<style>
+	.certificate-badge {
+		color: var(--certificate-accent);
+	}
+
+	.certificate-gallery {
+		-webkit-mask-image: linear-gradient(to right, transparent 0%, rgb(0 0 0 / 0.28) 13%, #000 38%);
+		mask-image: linear-gradient(to right, transparent 0%, rgb(0 0 0 / 0.28) 13%, #000 38%);
+	}
+
+	[data-certificate-slide] {
+		opacity: 0;
+		transition: opacity 900ms ease;
+	}
+
+	[data-certificate-slide][data-active='true'] {
+		opacity: 1;
+	}
+
+	.certificate-dot {
+		background: var(--certificate-accent);
+	}
+
+	@media (max-width: 480px) {
+		.featured-certificate {
+			min-height: auto;
+		}
+
+		.certificate-badge {
+			height: 4rem;
+			width: 4rem;
+		}
+	}
+</style>
+
+<script>
+	class DegreePhotoGallery extends HTMLElement {
+		private timer?: number;
+		private current = 0;
+		private activeLayer = 0;
+
+		connectedCallback() {
+			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+			const slides = Array.from(this.querySelectorAll<HTMLImageElement>('[data-certificate-slide]'));
+			const images = JSON.parse(this.dataset.galleryImages || '[]') as Array<{ src: string; position: string }>;
+			if (slides.length < 2 || images.length < 2) return;
+
+			this.timer = window.setInterval(async () => {
+				const nextIndex = (this.current + 1) % images.length;
+				const nextLayer = this.activeLayer === 0 ? 1 : 0;
+				const nextImage = images[nextIndex];
+				const preloader = new Image();
+				preloader.src = nextImage.src;
+				try { await preloader.decode(); } catch { return; }
+
+				slides[nextLayer].src = nextImage.src;
+				slides[nextLayer].style.objectPosition = nextImage.position;
+				requestAnimationFrame(() => {
+					slides[this.activeLayer]?.removeAttribute('data-active');
+					slides[nextLayer]?.setAttribute('data-active', 'true');
+					this.activeLayer = nextLayer;
+					this.current = nextIndex;
+				});
+			}, 8000);
+		}
+
+		disconnectedCallback() {
+			if (this.timer) window.clearInterval(this.timer);
+		}
+	}
+
+	if (!customElements.get('degree-photo-gallery')) {
+		customElements.define('degree-photo-gallery', DegreePhotoGallery);
+	}
+</script>

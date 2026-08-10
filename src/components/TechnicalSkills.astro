@@ -1,30 +1,556 @@
 ---
 import { skillGroups } from '../data/portfolio';
+import {
+	siAngular,
+	siArduino,
+	siClaudecode,
+	siDocker,
+	siDotnet,
+	siExpo,
+	siGit,
+	siGithub,
+	siJavascript,
+	siJira,
+	siMongodb,
+	siMysql,
+	siNextdotjs,
+	siNodedotjs,
+	siOpenapiinitiative,
+	siPhp,
+	siPostgresql,
+	siReact,
+	siScrumalliance,
+	siSocketdotio,
+	siSpringboot,
+	siTailwindcss,
+	siTrello,
+	siTypescript
+} from 'simple-icons';
+
+const skillIcons = {
+	'Spring Boot': siSpringboot,
+	'Node.js': siNodedotjs,
+	'.NET': siDotnet,
+	PHP: siPhp,
+	'REST APIs': siOpenapiinitiative,
+	WebSocket: siSocketdotio,
+	Angular: siAngular,
+	'Next.js': siNextdotjs,
+	'React.js': siReact,
+	TypeScript: siTypescript,
+	'JavaScript ES6+': siJavascript,
+	'Tailwind CSS': siTailwindcss,
+	'React Native': siReact,
+	Expo: siExpo,
+	PostgreSQL: siPostgresql,
+	MySQL: siMysql,
+	MongoDB: siMongodb,
+	Docker: siDocker,
+	Git: siGit,
+	GitHub: siGithub,
+	Jira: siJira,
+	Trello: siTrello,
+	Scrum: siScrumalliance,
+	'Claude Code': siClaudecode,
+	'Arduino (C++)': siArduino
+};
+
+const skillAssets: Record<string, string> = {
+	Java: '/tech-logos/java-logo.svg'
+};
+
+const skillGlyphs: Record<string, 'database' | 'server'> = {
+	Oracle: 'database',
+	WebLogic: 'server'
+};
+
+const skillMarks: Record<string, string> = {
+	AWS: 'aws',
+	Codex: '</>'
+};
+
+const skillColors: Record<string, string> = {
+	Java: '#e76f00',
+	'Spring Boot': '#6db33f',
+	'Node.js': '#5fa04e',
+	'.NET': '#512bd4',
+	PHP: '#777bb4',
+	'REST APIs': '#0ea5e9',
+	WebSocket: '#f59e0b',
+	WebLogic: '#f80000',
+	Angular: '#dd0031',
+	'Next.js': '#64748b',
+	'React.js': '#06b6d4',
+	TypeScript: '#3178c6',
+	'JavaScript ES6+': '#d6b600',
+	'Tailwind CSS': '#06b6d4',
+	'React Native': '#0ea5e9',
+	Expo: '#64748b',
+	PostgreSQL: '#4169e1',
+	MySQL: '#4479a1',
+	MongoDB: '#47a248',
+	Oracle: '#f80000',
+	Docker: '#2496ed',
+	AWS: '#ff9900',
+	Git: '#f05032',
+	GitHub: '#64748b',
+	Jira: '#0052cc',
+	Trello: '#0079bf',
+	Scrum: '#8b5cf6',
+	Codex: '#10a37f',
+	'Claude Code': '#d97757',
+	'Arduino (C++)': '#00878f'
+};
 ---
 
-<section class="relative z-10 w-full pb-20 pt-16" aria-labelledby="technical-skills-title">
-	<div class="flex items-center gap-3">
-		<span class="h-2.5 w-2.5 rounded-full bg-sky-400" aria-hidden="true"></span>
-		<h3 id="technical-skills-title" class="text-2xl font-bold tracking-[-0.02em] text-slate-950 dark:text-white sm:text-3xl" data-i18n-es="Habilidades técnicas" data-i18n-en="Technical skills">Habilidades técnicas</h3>
+<section data-skill-network class="relative z-10 w-full py-20 sm:py-24" aria-labelledby="technical-skills-title">
+	<div data-reveal class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+		<div class="flex items-center gap-3">
+			<span class="h-2 w-2 rounded-full bg-sky-500" aria-hidden="true"></span>
+			<h2 id="technical-skills-title" class="text-2xl font-bold tracking-[-0.025em] text-slate-950 dark:text-white" data-i18n-es="Habilidades técnicas" data-i18n-en="Technical skills">Habilidades técnicas</h2>
+		</div>
+
+		<div class="skill-route-status inline-flex min-h-9 items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3.5 py-2 text-xs font-bold text-slate-600 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300" aria-hidden="true">
+			<span class="skill-route-pulse h-2 w-2 rounded-full bg-sky-400"></span>
+			<span data-skill-route-name>Plataforma empresarial</span>
+			<span class="text-slate-400 dark:text-slate-500">·</span>
+			<span data-skill-route-count>1 / 6</span>
+		</div>
 	</div>
 
-	<div class="mt-9 grid gap-8 md:grid-cols-3 md:gap-6 lg:gap-8">
+	<div data-skill-map data-reveal-group class="relative mt-8 grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-8 lg:grid-cols-3 xl:grid-cols-5 xl:gap-6">
+		<svg data-skill-connections class="skill-connections pointer-events-none absolute inset-0 z-0 hidden h-full w-full overflow-visible xl:block" aria-hidden="true"></svg>
 		{skillGroups.map((group) => (
-			<article>
-				<div class="flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-800">
-					<h4 class="font-bold text-slate-800 dark:text-slate-200" data-i18n-es={group.title} data-i18n-en={group.titleEn}>{group.title}</h4>
-					<span class="text-xs font-bold tabular-nums text-slate-400">{String(group.skills.length).padStart(2, '0')}</span>
-				</div>
+			<article data-reveal-item class="relative z-10">
+				<h4 class="min-h-11 border-b border-slate-200 pb-2.5 text-xs font-bold leading-tight text-slate-900 dark:border-slate-800 dark:text-white sm:min-h-0 sm:text-sm" data-i18n-es={group.title} data-i18n-en={group.titleEn}>{group.title}</h4>
 
-				<ul class="mt-3 space-y-2.5" aria-label={`Tecnologías de ${group.title}`} data-i18n-label-es={`Tecnologías de ${group.title}`} data-i18n-label-en={`${group.titleEn} technologies`}>
-					{group.skills.map((skill) => (
-						<li class="group rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-[0_5px_18px_rgba(15,23,42,0.035)] transition duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-[0_10px_28px_rgba(14,165,233,0.10)] dark:border-slate-800 dark:bg-slate-900 dark:hover:border-sky-500">
-							<p class="font-semibold text-slate-800 transition-colors group-hover:text-sky-600 dark:text-slate-200 dark:group-hover:text-sky-400">{skill.name}</p>
-							<p class="mt-1 text-xs leading-relaxed text-slate-400 dark:text-slate-500" data-i18n-es={skill.description} data-i18n-en={skill.descriptionEn}>{skill.description}</p>
-						</li>
-					))}
+				<ul class="mt-3 space-y-2" aria-label={`Tecnologías de ${group.title}`} data-i18n-label-es={`Tecnologías de ${group.title}`} data-i18n-label-en={`${group.titleEn} technologies`}>
+					{group.skills.map((skill) => {
+						const icon = skillIcons[skill as keyof typeof skillIcons];
+						const asset = skillAssets[skill];
+						const glyph = skillGlyphs[skill];
+						const mark = skillMarks[skill];
+						return (
+							<li data-skill-card data-skill-name={skill} class="skill-card relative flex min-h-10 items-center rounded-lg border border-slate-300 bg-slate-100/80 px-2.5 py-2 pr-8 text-xs font-medium leading-tight text-slate-800 dark:border-slate-700 dark:bg-slate-950/80 dark:text-slate-200 sm:px-3 sm:py-2.5 sm:pr-11 sm:text-sm" style={`--skill-accent: ${skillColors[skill] || '#8b5cf6'}`}>
+								{skill}
+								<span class:list={['skill-logo', asset && 'skill-logo-asset']} aria-hidden="true">
+									{asset ? (
+										<img class="skill-logo-image" src={asset} alt="" loading="lazy" decoding="async" />
+									) : icon ? (
+										<svg viewBox="0 0 24 24" role="presentation">
+											<path d={icon.path}></path>
+										</svg>
+									) : glyph === 'database' ? (
+										<svg class="skill-logo-glyph" viewBox="0 0 24 24" role="presentation">
+											<ellipse cx="12" cy="5" rx="7" ry="3"></ellipse>
+											<path d="M5 5v7c0 1.66 3.13 3 7 3s7-1.34 7-3V5c0 1.66-3.13 3-7 3S5 6.66 5 5Z"></path>
+											<path d="M5 12v7c0 1.66 3.13 3 7 3s7-1.34 7-3v-7c0 1.66-3.13 3-7 3s-7-1.34-7-3Z"></path>
+										</svg>
+									) : glyph === 'server' ? (
+										<svg class="skill-logo-glyph" viewBox="0 0 24 24" role="presentation">
+											<path d="M4 3h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 10h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Zm2-7a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm0 10a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"></path>
+										</svg>
+									) : (
+										<span class:list={['skill-logo-mark', mark === 'aws' && 'skill-logo-mark-wide']}>{mark || skill.slice(0, 1)}</span>
+									)}
+								</span>
+							</li>
+						);
+					})}
 				</ul>
 			</article>
 		))}
 	</div>
 </section>
+
+<script>
+	import { skillRoutes, type SkillRoute } from '../data/skillRoutes';
+
+	const network = document.querySelector<HTMLElement>('[data-skill-network]');
+	const skillMap = network?.querySelector<HTMLElement>('[data-skill-map]');
+	const connectionSvg = network?.querySelector<SVGSVGElement>('[data-skill-connections]');
+	const routeName = network?.querySelector<HTMLElement>('[data-skill-route-name]');
+	const routeCount = network?.querySelector<HTMLElement>('[data-skill-route-count]');
+	const routeStatus = network?.querySelector<HTMLElement>('.skill-route-status');
+	const skillCards = network?.querySelectorAll<HTMLElement>('[data-skill-card]') ?? [];
+	const skillHideTimers = new Map<HTMLElement, number>();
+	const routeTimers: number[] = [];
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+	let routeInterval = 0;
+	let resizeTimer = 0;
+	let routeResumeTimer = 0;
+	let activeRouteIndex = 0;
+	let networkVisible = false;
+	let skillInteractionPaused = false;
+
+	const skillCardByName = new Map<string, HTMLElement>();
+	skillCards.forEach((card) => {
+		const name = card.dataset.skillName;
+		if (name) skillCardByName.set(name, card);
+	});
+
+	const clearRouteTimers = () => {
+		routeTimers.forEach((timer) => window.clearTimeout(timer));
+		routeTimers.length = 0;
+	};
+
+	const clearRouteState = () => {
+		clearRouteTimers();
+		skillCards.forEach((card) => {
+			card.classList.remove('is-project-skill', 'is-project-skill-visible');
+			card.style.removeProperty('--route-color');
+		});
+		connectionSvg?.replaceChildren();
+	};
+
+	const drawConnections = (route: SkillRoute, stages: HTMLElement[][], animate = true) => {
+		if (!skillMap || !connectionSvg || window.innerWidth < 1280) return;
+		const mapRect = skillMap.getBoundingClientRect();
+		if (!mapRect.width || !mapRect.height) return;
+
+		connectionSvg.setAttribute('viewBox', `0 0 ${mapRect.width} ${mapRect.height}`);
+		connectionSvg.replaceChildren();
+
+		const stagePoints = stages.map((cards) => cards.map((card) => {
+			const rect = card.getBoundingClientRect();
+			return {
+				x: rect.left - mapRect.left + rect.width / 2,
+				y: rect.top - mapRect.top + rect.height / 2
+			};
+		})).filter((points) => points.length > 0);
+
+		const anchors = stagePoints.map((points) => ({
+			x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+			y: points.reduce((sum, point) => sum + point.y, 0) / points.length
+		}));
+
+		const appendPath = (pathData: string, className: string, delay: number) => {
+			const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+			path.setAttribute('d', pathData);
+			path.setAttribute('class', className);
+			path.style.setProperty('--route-color', route.color);
+			connectionSvg.appendChild(path);
+			const length = path.getTotalLength();
+			path.style.strokeDasharray = `${length}`;
+			path.style.strokeDashoffset = animate ? `${length}` : '0';
+			path.style.animationDelay = animate ? `${delay}ms` : '0ms';
+			if (!animate) path.classList.add('is-static');
+		};
+
+		anchors.slice(0, -1).forEach((anchor, index) => {
+			const next = anchors[index + 1];
+			const middleX = anchor.x + (next.x - anchor.x) / 2;
+			appendPath(
+				`M ${anchor.x} ${anchor.y} C ${middleX} ${anchor.y}, ${middleX} ${next.y}, ${next.x} ${next.y}`,
+				'skill-connection-line',
+				index * 950
+			);
+		});
+
+		stagePoints.forEach((points, stageIndex) => {
+			const anchor = anchors[stageIndex];
+			points.forEach((point) => {
+				if (Math.abs(point.y - anchor.y) > 2) {
+					appendPath(
+						`M ${anchor.x} ${anchor.y} C ${anchor.x + 8} ${anchor.y}, ${point.x + 8} ${point.y}, ${point.x} ${point.y}`,
+						'skill-connection-line skill-connection-branch',
+						stageIndex * 950 + 250
+					);
+				}
+
+				const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+				dot.setAttribute('cx', String(point.x));
+				dot.setAttribute('cy', String(point.y));
+				dot.setAttribute('r', '2.5');
+				dot.setAttribute('class', 'skill-connection-dot');
+				dot.style.setProperty('--route-color', route.color);
+				dot.style.animationDelay = animate ? `${stageIndex * 950 + 420}ms` : '0ms';
+				if (!animate) dot.classList.add('is-static');
+				connectionSvg.appendChild(dot);
+			});
+		});
+	};
+
+	const showRoute = (index: number, animate = true) => {
+		if (!network) return;
+		clearRouteState();
+		activeRouteIndex = (index + skillRoutes.length) % skillRoutes.length;
+		const route = skillRoutes[activeRouteIndex];
+		const language = document.documentElement.dataset.language === 'en' ? 'en' : 'es';
+		const stages = route.stages.map((skills) => skills
+			.map((skill) => skillCardByName.get(skill))
+			.filter((card): card is HTMLElement => Boolean(card)));
+
+		if (routeName) routeName.textContent = language === 'en' ? route.labelEn : route.labelEs;
+		if (routeCount) routeCount.textContent = `${activeRouteIndex + 1} / ${skillRoutes.length}`;
+		routeStatus?.style.setProperty('--route-color', route.color);
+
+		stages.forEach((cards, stageIndex) => {
+			cards.forEach((card) => {
+				card.classList.add('is-project-skill');
+				card.style.setProperty('--route-color', route.color);
+				if (!animate) {
+					card.classList.add('is-project-skill-visible');
+					return;
+				}
+				const timer = window.setTimeout(() => card.classList.add('is-project-skill-visible'), stageIndex * 950);
+				routeTimers.push(timer);
+			});
+		});
+
+		drawConnections(route, stages, animate);
+	};
+
+	const stopRouteCycle = () => {
+		window.clearInterval(routeInterval);
+		routeInterval = 0;
+	};
+
+	const startRouteCycle = () => {
+		stopRouteCycle();
+		if (!networkVisible || reducedMotion.matches || skillInteractionPaused) return;
+		routeInterval = window.setInterval(() => showRoute(activeRouteIndex + 1), 12000);
+	};
+
+	const pauseRouteForSkillInteraction = () => {
+		window.clearTimeout(routeResumeTimer);
+		routeResumeTimer = 0;
+		skillInteractionPaused = true;
+		stopRouteCycle();
+		clearRouteState();
+		network?.classList.add('is-skill-network-paused');
+	};
+
+	const scheduleRouteResume = () => {
+		window.clearTimeout(routeResumeTimer);
+		routeResumeTimer = window.setTimeout(() => {
+			skillInteractionPaused = false;
+			network?.classList.remove('is-skill-network-paused');
+			if (!networkVisible) return;
+			showRoute(activeRouteIndex, !reducedMotion.matches);
+			startRouteCycle();
+		}, 5000);
+	};
+
+	skillCards.forEach((card) => {
+		card.addEventListener('mouseenter', () => {
+			pauseRouteForSkillInteraction();
+			const currentTimer = skillHideTimers.get(card);
+			if (currentTimer) window.clearTimeout(currentTimer);
+			skillHideTimers.delete(card);
+			card.classList.add('is-skill-active');
+		});
+
+		card.addEventListener('mouseleave', () => {
+			scheduleRouteResume();
+			const currentTimer = skillHideTimers.get(card);
+			if (currentTimer) window.clearTimeout(currentTimer);
+			const timer = window.setTimeout(() => {
+				card.classList.remove('is-skill-active');
+				skillHideTimers.delete(card);
+			}, 6000);
+			skillHideTimers.set(card, timer);
+		});
+	});
+
+	const networkObserver = network && 'IntersectionObserver' in window
+		? new IntersectionObserver((entries) => {
+			networkVisible = entries[0]?.isIntersecting ?? false;
+			if (networkVisible) {
+				if (!skillInteractionPaused) {
+					showRoute(activeRouteIndex, !reducedMotion.matches);
+					startRouteCycle();
+				}
+			} else {
+				stopRouteCycle();
+				clearRouteTimers();
+			}
+		}, { threshold: 0.2 })
+		: null;
+
+	if (networkObserver && network) networkObserver.observe(network);
+	else {
+		networkVisible = true;
+		showRoute(0, !reducedMotion.matches);
+		startRouteCycle();
+	}
+
+	const handleLanguageChange = () => {
+		if (!skillInteractionPaused) showRoute(activeRouteIndex, false);
+	};
+	const handleResize = () => {
+		window.clearTimeout(resizeTimer);
+		resizeTimer = window.setTimeout(() => {
+			if (!skillInteractionPaused) showRoute(activeRouteIndex, false);
+		}, 120);
+	};
+	window.addEventListener('portfolio-language-change', handleLanguageChange);
+	window.addEventListener('resize', handleResize, { passive: true });
+
+	document.addEventListener('astro:before-swap', () => {
+		stopRouteCycle();
+		clearRouteTimers();
+		window.clearTimeout(resizeTimer);
+		window.clearTimeout(routeResumeTimer);
+		networkObserver?.disconnect();
+		window.removeEventListener('portfolio-language-change', handleLanguageChange);
+		window.removeEventListener('resize', handleResize);
+		skillHideTimers.forEach((timer) => window.clearTimeout(timer));
+		skillHideTimers.clear();
+	}, { once: true });
+</script>
+
+<style>
+	.skill-card {
+		transition:
+			border-color 200ms ease,
+			background-color 200ms ease,
+			box-shadow 200ms ease;
+	}
+
+	.skill-card:hover,
+	.skill-card.is-skill-active {
+		border-color: var(--skill-accent);
+		background-color: color-mix(in srgb, var(--skill-accent) 10%, transparent);
+		box-shadow: inset 3px 0 0 var(--skill-accent);
+	}
+
+	.skill-card.is-project-skill {
+		border-color: color-mix(in srgb, var(--route-color) 70%, transparent);
+	}
+
+	.skill-card.is-project-skill-visible {
+		border-color: var(--route-color);
+		background-color: color-mix(in srgb, var(--route-color) 11%, transparent);
+		box-shadow: inset 3px 0 0 var(--route-color), 0 0 0 1px color-mix(in srgb, var(--route-color) 12%, transparent);
+	}
+
+	.skill-card.is-project-skill-visible .skill-logo {
+		opacity: 1;
+		transform: translateY(-50%) scale(1) rotate(0deg);
+	}
+
+	.skill-route-status {
+		transition: border-color 240ms ease, color 240ms ease, opacity 220ms ease, transform 220ms ease;
+		border-color: color-mix(in srgb, var(--route-color, #38bdf8) 42%, transparent);
+	}
+
+	.is-skill-network-paused .skill-route-status {
+		opacity: 0;
+		transform: translateY(4px);
+	}
+
+	.skill-route-pulse {
+		background: var(--route-color, #38bdf8);
+		box-shadow: 0 0 0 0 color-mix(in srgb, var(--route-color, #38bdf8) 45%, transparent);
+		animation: skillRoutePulse 1.8s ease-out infinite;
+	}
+
+	:global(.skill-connection-line) {
+		fill: none;
+		stroke: var(--route-color);
+		stroke-width: 2;
+		stroke-linecap: round;
+		opacity: 0.72;
+		filter: drop-shadow(0 0 4px color-mix(in srgb, var(--route-color) 45%, transparent));
+		animation: drawSkillConnection 1600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+
+	:global(.skill-connection-line.is-static) {
+		animation: none;
+	}
+
+	:global(.skill-connection-branch) {
+		stroke-width: 1.35;
+		opacity: 0.42;
+	}
+
+	:global(.skill-connection-dot) {
+		fill: var(--route-color);
+		opacity: 0;
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: revealSkillConnectionDot 320ms ease-out forwards;
+	}
+
+	:global(.skill-connection-dot.is-static) {
+		opacity: 0.48;
+		animation: none;
+	}
+
+	.skill-logo {
+		position: absolute;
+		right: 0.7rem;
+		top: 50%;
+		display: grid;
+		width: 1.3rem;
+		height: 1.3rem;
+		place-items: center;
+		color: var(--skill-accent);
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(-50%) scale(0.65) rotate(-6deg);
+		transition:
+			opacity 180ms ease,
+			transform 180ms ease;
+	}
+
+	.skill-card:hover .skill-logo,
+	.skill-card.is-skill-active .skill-logo {
+		opacity: 1;
+		transform: translateY(-50%) scale(1) rotate(0deg);
+	}
+
+	.skill-logo svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		fill: currentColor;
+	}
+
+	.skill-logo-asset {
+		width: 1.55rem;
+		height: 1.9rem;
+	}
+
+	.skill-logo-image {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	.skill-logo-glyph {
+		overflow: visible;
+	}
+
+	.skill-logo-mark {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		font-size: 1rem;
+		font-weight: 900;
+		line-height: 1;
+	}
+
+	.skill-logo-mark-wide {
+		font-size: 0.65rem;
+		letter-spacing: -0.06em;
+	}
+
+	@keyframes drawSkillConnection {
+		to { stroke-dashoffset: 0; }
+	}
+
+	@keyframes revealSkillConnectionDot {
+		0% { opacity: 0; transform: scale(0.4); }
+		100% { opacity: 0.48; transform: scale(1); }
+	}
+
+	@keyframes skillRoutePulse {
+		70%, 100% { box-shadow: 0 0 0 7px transparent; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.skill-route-pulse { animation: none; }
+		.skill-card { transition: none; }
+	}
+</style>

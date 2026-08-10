@@ -6,20 +6,20 @@ const suggestions = [
 ];
 ---
 
-<section id="chat" data-chat-root class="chat-section relative isolate overflow-hidden border-b border-slate-200 bg-white px-5 py-20 transition-colors dark:border-slate-800 dark:bg-slate-950 sm:px-8 sm:py-28" aria-labelledby="chat-title">
-	<div class="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_16%_18%,rgba(56,189,248,0.13),transparent_26%),radial-gradient(circle_at_84%_70%,rgba(139,92,246,0.10),transparent_24%)]" aria-hidden="true"></div>
+<section id="chat" data-chat-root class="chat-section relative isolate overflow-hidden border-b border-slate-300 bg-slate-200/70 px-5 py-16 transition-colors dark:border-slate-800 dark:bg-slate-950 sm:px-8 sm:py-20" aria-labelledby="chat-title">
+	<div class="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_16%_18%,rgba(245,158,11,0.12),transparent_26%),radial-gradient(circle_at_84%_70%,rgba(56,189,248,0.14),transparent_25%)]" aria-hidden="true"></div>
 	<div class="chat-grid pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden="true"></div>
-	<div class="pointer-events-none absolute left-[8%] top-[20%] h-1.5 w-1.5 rounded-full bg-sky-300/70" aria-hidden="true"></div>
-	<div class="pointer-events-none absolute right-[12%] top-[30%] h-1 w-1 rounded-full bg-violet-400/60" aria-hidden="true"></div>
+	<div class="pointer-events-none absolute left-[8%] top-[20%] h-1.5 w-1.5 rounded-full bg-amber-400/60" aria-hidden="true"></div>
+	<div class="pointer-events-none absolute right-[12%] top-[30%] h-1 w-1 rounded-full bg-sky-300/70" aria-hidden="true"></div>
 	<div class="pointer-events-none absolute bottom-[18%] left-[18%] h-1 w-1 rounded-full bg-sky-400/50" aria-hidden="true"></div>
 
-	<div class="relative mx-auto max-w-[980px] text-center">
+	<div data-reveal class="relative mx-auto max-w-[980px] text-center">
 		<p class="mx-auto mb-7 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-xs font-bold text-slate-500 shadow-sm backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/85 dark:text-slate-300 sm:text-sm">
-			<span class="text-base text-sky-500" aria-hidden="true">✦</span>
+			<span class="grid h-6 w-6 place-items-center rounded-full bg-sky-100 text-amber-500 dark:bg-sky-400/10 dark:text-amber-300" aria-hidden="true"><span class="chat-lightning-icon"></span></span>
 			<span data-i18n-es="Asistente de IA · Impulsado por Groq" data-i18n-en="AI assistant · Powered by Groq">Asistente de IA · Impulsado por Groq</span>
 		</p>
 
-		<h2 id="chat-title" class="mx-auto max-w-4xl text-5xl font-bold leading-[1.03] tracking-[-0.05em] text-slate-950 dark:text-white sm:text-6xl lg:text-7xl">
+		<h2 id="chat-title" class="mx-auto max-w-4xl text-4xl font-bold leading-[1.03] tracking-[-0.05em] text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
 			<span data-language-copy="es">Conoce mi trabajo. O pregunta sobre <span class="chat-gradient-text">cualquier tema.</span></span>
 			<span data-language-copy="en" hidden>Explore my work. Or ask about <span class="chat-gradient-text">anything.</span></span>
 		</h2>
@@ -646,7 +646,7 @@ const suggestions = [
 	}
 
 	.chat-gradient-text {
-		background: linear-gradient(100deg, #0ea5e9 0%, #3b82f6 44%, #8b5cf6 100%);
+		background: linear-gradient(100deg, #f59e0b 0%, #fbbf24 42%, #38bdf8 100%);
 		background-clip: text;
 		-webkit-background-clip: text;
 		color: transparent;
@@ -659,7 +659,7 @@ const suggestions = [
 		position: absolute;
 		inset: -1px -1px auto;
 		height: 2px;
-		background: linear-gradient(90deg, transparent, #0ea5e9, #8b5cf6, transparent);
+		background: linear-gradient(90deg, transparent, #f59e0b, #fbbf24, #38bdf8, transparent);
 		opacity: 0.72;
 		pointer-events: none;
 	}
@@ -710,6 +710,14 @@ const suggestions = [
 	}
 
 	[aria-checked="true"] .chat-check { opacity: 1; }
+
+	.chat-lightning-icon {
+		display: block;
+		width: 0.7rem;
+		height: 0.9rem;
+		background: currentColor;
+		clip-path: polygon(56% 0, 16% 54%, 45% 54%, 34% 100%, 84% 39%, 55% 39%);
+	}
 
 	.chat-send-icon {
 		position: relative;

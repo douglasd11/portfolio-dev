@@ -1,7 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import logo from '../assets/logo.png';
-
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const navItems = [
 	{ href: '/', labelEs: 'Inicio', labelEn: 'Home' },
@@ -10,11 +7,11 @@ const navItems = [
 ];
 ---
 
-<header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-md transition-colors dark:border-slate-800 dark:bg-slate-950/90">
-	<div class="mx-auto flex w-full max-w-[1160px] flex-wrap items-center justify-between gap-3 px-6 py-3 sm:flex-nowrap sm:gap-6">
-		<a href="/" class="flex shrink-0 items-center gap-3 text-sm" aria-label="Ir a Inicio" data-i18n-label-es="Ir a Inicio" data-i18n-label-en="Go to Home">
-			<Image class="h-9 w-9 rounded-full ring-1 ring-slate-200 dark:ring-slate-700" src={logo} alt="Logo de Douglas Guerrero" width={36} height={36} />
-			<span class="hidden max-w-24 font-extrabold leading-4 text-slate-800 dark:text-white sm:inline" data-i18n-es="DOUGLAS DESARROLLADOR" data-i18n-en="DOUGLAS DEVELOPER">DOUGLAS DESARROLLADOR</span>
+<header class="sticky top-0 z-40 w-full border-b border-slate-300/80 bg-slate-100/90 backdrop-blur-md transition-colors dark:border-slate-800 dark:bg-slate-950/90">
+	<div class="mx-auto flex w-full max-w-[1160px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:flex-nowrap sm:gap-6 sm:px-6 xl:px-0">
+		<a href="/" class="flex shrink-0 flex-col items-start gap-0.5" aria-label="Ir a Inicio" data-i18n-label-es="Ir a Inicio" data-i18n-label-en="Go to Home">
+			<span class="text-[11px] font-black uppercase leading-none tracking-[0.24em] text-sky-500">Portfolio</span>
+			<span class="text-sm font-extrabold leading-tight text-slate-900 dark:text-white sm:text-base">Douglas Guerrero</span>
 		</a>
 
 		<nav aria-label="Navegación principal" data-i18n-label-es="Navegación principal" data-i18n-label-en="Main navigation" class="order-3 flex w-full items-center justify-center gap-6 whitespace-nowrap text-sm font-semibold text-slate-600 dark:text-slate-300 sm:order-none sm:ml-auto sm:w-auto sm:gap-8 sm:text-base">
@@ -74,7 +71,7 @@ const navItems = [
 		document.documentElement.style.colorScheme = nextTheme;
 		localStorage.setItem('portfolio-theme', nextTheme);
 		const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-		if (themeMeta) themeMeta.content = nextTheme === 'dark' ? '#020617' : '#ffffff';
+		if (themeMeta) themeMeta.content = nextTheme === 'dark' ? '#020617' : '#f1f5f9';
 		updateThemeControl();
 	});
 

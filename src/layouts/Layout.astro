@@ -13,8 +13,31 @@ const {
 	description = 'Portfolio de Douglas Guerrero, desarrollador web full-stack especializado en crear experiencias digitales claras, rápidas y accesibles.'
 } = Astro.props;
 
-const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
-const socialImageUrl = Astro.site ? new URL('/og.png', Astro.site) : '/og.png';
+const configuredSite = import.meta.env.SITE_URL
+	? new URL(import.meta.env.SITE_URL)
+	: Astro.site;
+const canonicalUrl = configuredSite ? new URL(Astro.url.pathname, configuredSite) : undefined;
+const socialImageUrl = configuredSite ? new URL('/og.jpg', configuredSite) : undefined;
+const personStructuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: 'Douglas Guerrero',
+	jobTitle: 'Ingeniero de Sistemas y desarrollador full-stack',
+	address: {
+		'@type': 'PostalAddress',
+		addressLocality: 'Cartagena',
+		addressCountry: 'CO'
+	},
+	alumniOf: {
+		'@type': 'CollegeOrUniversity',
+		name: 'Universidad de Cartagena'
+	},
+	sameAs: [
+		'https://www.linkedin.com/in/douglas-ge/',
+		'https://github.com/douglasd11'
+	],
+	knowsAbout: ['Java', 'Spring Boot', 'Node.js', 'Angular', 'Next.js', 'PostgreSQL', 'Docker', 'AWS']
+};
 ---
 
 <!doctype html>
@@ -32,6 +55,14 @@ const socialImageUrl = Astro.site ? new URL('/og.png', Astro.site) : '/og.png';
 					document.documentElement.dataset.language = language;
 					document.documentElement.lang = language;
 					document.documentElement.style.colorScheme = theme;
+					if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+						document.documentElement.classList.add('motion-ready');
+						window.setTimeout(() => {
+							if (document.documentElement.dataset.motionInitialized !== 'true') {
+								document.documentElement.classList.remove('motion-ready');
+							}
+						}, 1800);
+					}
 				} catch {
 					document.documentElement.dataset.theme = 'light';
 					document.documentElement.dataset.language = 'es';
@@ -40,29 +71,86 @@ const socialImageUrl = Astro.site ? new URL('/og.png', Astro.site) : '/og.png';
 		</script>
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="theme-color" content="#ffffff" />
+		<meta name="theme-color" content="#f1f5f9" />
 		<meta property="og:type" content="website" />
 		<meta property="og:locale" content="es_CO" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:url" content={canonicalUrl} />
-		<meta property="og:image" content={socialImageUrl} />
+		{canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+		{socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
 		<meta property="og:image:alt" content="Douglas Guerrero — Desarrollador full-stack" />
 		<meta property="og:image:width" content="1728" />
 		<meta property="og:image:height" content="907" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={socialImageUrl} />
-		<link rel="canonical" href={canonicalUrl} />
+		{socialImageUrl && <meta name="twitter:image" content={socialImageUrl} />}
+		{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(personStructuredData)}></script>
 		<title>{title}</title>
 	</head>
 	<body class="transition-colors duration-300">
 		<a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg dark:focus:bg-slate-900">Saltar al contenido</a>
+		<div data-cursor-warm-glow class="cursor-warm-glow" aria-hidden="true"></div>
 		<Header />
 		<slot />
 		<Footer />
 	</body>
 </html>
+
+<script>
+	import { setupScrollReveals } from '../scripts/scroll-reveal';
+
+	const stopScrollReveals = setupScrollReveals();
+	const cursorGlow = document.querySelector<HTMLElement>('[data-cursor-warm-glow]');
+	const supportsCursorGlow = window.matchMedia('(hover: hover) and (pointer: fine)');
+	const reducesMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+	let glowFrame = 0;
+	let currentX = window.innerWidth / 2;
+	let currentY = window.innerHeight / 2;
+	let targetX = currentX;
+	let targetY = currentY;
+	let hasPointerPosition = false;
+
+	const renderCursorGlow = () => {
+		if (!cursorGlow) return;
+		currentX += (targetX - currentX) * 0.16;
+		currentY += (targetY - currentY) * 0.16;
+		cursorGlow.style.setProperty('--cursor-glow-x', `${currentX}px`);
+		cursorGlow.style.setProperty('--cursor-glow-y', `${currentY}px`);
+
+		if (Math.abs(targetX - currentX) > 0.25 || Math.abs(targetY - currentY) > 0.25) {
+			glowFrame = window.requestAnimationFrame(renderCursorGlow);
+		} else {
+			glowFrame = 0;
+		}
+	};
+
+	const moveCursorGlow = (event: PointerEvent) => {
+		if (!cursorGlow || !supportsCursorGlow.matches || reducesMotion.matches) return;
+		targetX = event.clientX;
+		targetY = event.clientY;
+		if (!hasPointerPosition) {
+			currentX = targetX;
+			currentY = targetY;
+			hasPointerPosition = true;
+		}
+		cursorGlow.classList.add('is-visible');
+		if (!glowFrame) glowFrame = window.requestAnimationFrame(renderCursorGlow);
+	};
+
+	const hideCursorGlow = () => cursorGlow?.classList.remove('is-visible');
+
+	window.addEventListener('pointermove', moveCursorGlow, { passive: true });
+	document.documentElement.addEventListener('pointerleave', hideCursorGlow);
+	window.addEventListener('blur', hideCursorGlow);
+	document.addEventListener('astro:before-swap', () => {
+		stopScrollReveals();
+		window.cancelAnimationFrame(glowFrame);
+		window.removeEventListener('pointermove', moveCursorGlow);
+		document.documentElement.removeEventListener('pointerleave', hideCursorGlow);
+		window.removeEventListener('blur', hideCursorGlow);
+	}, { once: true });
+</script>

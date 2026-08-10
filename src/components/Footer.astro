@@ -1,32 +1,120 @@
 ---
 const year = new Date().getFullYear();
+const isHomePage = Astro.url.pathname === '/';
 ---
 
-<footer class="z-0 w-full bg-slate-950 text-white">
-	<div class="mx-auto flex w-full max-w-[1160px] flex-col px-8">
-		<div class="flex w-full flex-wrap justify-between gap-8 py-10">
-			<h2 class="text-4xl font-bold sm:text-[40px]">Escríbeme.</h2>
+<footer
+	class:list={[
+		'relative z-10 w-full border-t border-slate-200 text-slate-950 transition-colors dark:border-slate-800 dark:text-white',
+		isHomePage ? 'bg-slate-100 dark:bg-slate-950' : 'bg-slate-200 dark:bg-slate-900'
+	]}
+>
+	<div class="mx-auto flex w-full max-w-[1160px] flex-col px-4 sm:px-6 xl:max-w-[1208px] xl:px-6">
+		<div class="flex w-full flex-col items-start justify-between gap-6 py-10 lg:flex-row lg:items-center">
+			<h2 class="shrink-0 text-xl font-bold sm:text-2xl lg:whitespace-nowrap" data-i18n-es="Conversemos." data-i18n-en="Let’s talk.">Conversemos.</h2>
 
-			<div class="flex flex-wrap gap-8 sm:gap-16">
-				<a href="https://www.linkedin.com/in/douglas-ge/" target="_blank" rel="noopener noreferrer" class="group flex items-end gap-4">
-					<span class="flex h-12 w-12 items-center justify-center rounded-full bg-white transition-transform group-hover:-translate-y-1">
-						<img class="h-6 w-6" src="/icon_linkedin_black.png" alt="" width="24" height="24" />
+			<div class="flex w-full flex-wrap items-center gap-6 sm:gap-x-8 sm:gap-y-6 lg:w-auto lg:flex-nowrap">
+				<a href="https://www.linkedin.com/in/douglas-ge/" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 transition-colors hover:text-sky-600 dark:hover:text-sky-400">
+					<span class="flex h-7 w-7 items-center justify-center transition-transform group-hover:-translate-y-1">
+						<img class="h-5 w-5 dark:invert" src="/icon_linkedin_black.png" alt="" width="20" height="20" />
 					</span>
-					<span class="flex flex-col text-sm"><span class="text-gray-400">LinkedIn</span><span>linkedin.com/in/douglas-ge/</span></span>
+					<span class="flex flex-col text-xs"><span class="text-slate-500 dark:text-slate-400">LinkedIn</span><span>linkedin.com/in/douglas-ge/</span></span>
 				</a>
 
-				<a href="https://github.com/douglasd11" target="_blank" rel="noopener noreferrer" class="group flex items-end gap-4">
-					<span class="flex h-12 w-12 items-center justify-center rounded-full bg-white transition-transform group-hover:-translate-y-1">
-						<img class="h-6 w-6" src="/icon_github_black.png" alt="" width="24" height="24" />
+				<a href="https://github.com/douglasd11" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 transition-colors hover:text-sky-600 dark:hover:text-sky-400">
+					<span class="flex h-7 w-7 items-center justify-center transition-transform group-hover:-translate-y-1">
+						<img class="h-5 w-5 dark:invert" src="/icon_github_black.png" alt="" width="20" height="20" />
 					</span>
-					<span class="flex flex-col text-sm"><span class="text-gray-400">GitHub</span><span>github.com/douglasd11</span></span>
+					<span class="flex flex-col text-xs"><span class="text-slate-500 dark:text-slate-400">GitHub</span><span>github.com/douglasd11</span></span>
 				</a>
+
+				<div class="relative flex items-center">
+					<button
+						type="button"
+						data-email-copy
+						data-email="dguerreroe921@gmail.com"
+						class="group flex items-center gap-3 text-left transition-colors hover:text-sky-600 dark:hover:text-sky-400"
+						aria-label="Copiar correo dguerreroe921@gmail.com"
+						data-i18n-label-es="Copiar correo dguerreroe921@gmail.com"
+						data-i18n-label-en="Copy email dguerreroe921@gmail.com"
+					>
+						<span class="flex h-7 w-7 items-center justify-center text-base font-black transition-transform group-hover:-translate-y-1" aria-hidden="true">@</span>
+						<span class="flex flex-col text-xs">
+							<span class="text-slate-500 dark:text-slate-400" data-i18n-es="Correo" data-i18n-en="Email">Correo</span>
+							<span>dguerreroe921@gmail.com</span>
+						</span>
+					</button>
+
+					<div data-copy-toast class="copy-toast absolute bottom-[calc(100%+0.65rem)] left-1/2 z-20 flex -translate-x-1/2 translate-y-2 items-center gap-2 whitespace-nowrap rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-900 opacity-0 shadow-[0_10px_30px_rgba(15,23,42,0.18)] dark:border-slate-700 dark:bg-slate-900 dark:text-white" role="status" aria-live="polite" aria-atomic="true">
+						<span class="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] text-white" aria-hidden="true">✓</span>
+						<span data-i18n-es="Copiado" data-i18n-en="Copied">Copiado</span>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<div class="flex w-full flex-col justify-between gap-2 border-t border-gray-600 py-4 text-xs sm:flex-row sm:text-sm">
-			<p>© {year} Douglas Guerrero. Todos los derechos reservados.</p>
-			<p>Desarrollado con Astro, Three.js y Tailwind CSS.</p>
+		<div class="flex w-full flex-col justify-between gap-2 border-t border-slate-200 py-4 text-xs text-slate-600 dark:border-slate-700 dark:text-slate-300 sm:flex-row sm:text-sm">
+			<p data-i18n-es={`© ${year} Douglas Guerrero. Todos los derechos reservados.`} data-i18n-en={`© ${year} Douglas Guerrero. All rights reserved.`}>© {year} Douglas Guerrero. Todos los derechos reservados.</p>
+			<p data-i18n-es="Desarrollado con Astro, Motion y Tailwind CSS." data-i18n-en="Built with Astro, Motion, and Tailwind CSS.">Desarrollado con Astro, Motion y Tailwind CSS.</p>
 		</div>
 	</div>
 </footer>
+
+<script>
+	const emailCopyButton = document.querySelector<HTMLButtonElement>('[data-email-copy]');
+	const copyToast = document.querySelector<HTMLElement>('[data-copy-toast]');
+	let copyToastTimer = 0;
+
+	const fallbackCopy = (value: string) => {
+		const input = document.createElement('textarea');
+		input.value = value;
+		input.setAttribute('readonly', '');
+		input.style.position = 'fixed';
+		input.style.opacity = '0';
+		document.body.appendChild(input);
+		input.select();
+		const legacyCopy = Reflect.get(document, 'execCommand');
+		const copied = typeof legacyCopy === 'function' && legacyCopy.call(document, 'copy');
+		input.remove();
+		if (!copied) throw new Error('Copy failed');
+	};
+
+	const copyEmail = async () => {
+		const email = emailCopyButton?.dataset.email;
+		if (!email || !copyToast) return;
+
+		try {
+			if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(email);
+			else fallbackCopy(email);
+
+			copyToast.classList.add('is-visible');
+			window.clearTimeout(copyToastTimer);
+			copyToastTimer = window.setTimeout(() => {
+				copyToast.classList.remove('is-visible');
+			}, 2200);
+		} catch {}
+	};
+
+	emailCopyButton?.addEventListener('click', copyEmail);
+	document.addEventListener('astro:before-swap', () => window.clearTimeout(copyToastTimer), { once: true });
+</script>
+
+<style>
+	.copy-toast {
+		pointer-events: none;
+		transition:
+			opacity 180ms ease,
+			transform 180ms ease;
+	}
+
+	.copy-toast.is-visible {
+		transform: translate(-50%, 0);
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.copy-toast {
+			transition-duration: 1ms;
+		}
+	}
+</style>

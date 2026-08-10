@@ -1,35 +1,715 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import CertificateCard from '../components/CertificateCard.astro';
 import { projects } from '../data/projects';
+import { certificates } from '../data/certificates';
+
+export const prerender = true;
 ---
 
 <Layout
 	title="Proyectos — Douglas Guerrero"
 	description="Proyectos de Douglas Guerrero: productos web, experiencias de entretenimiento y sistemas de gestión."
 >
-	<main id="contenido" class="min-h-screen bg-white transition-colors dark:bg-slate-950">
-		<section class="relative overflow-hidden border-b border-slate-200 px-8 py-20 transition-colors dark:border-slate-800 sm:py-28">
+	<main id="contenido" class="min-h-screen bg-slate-100 transition-colors dark:bg-slate-950">
+		<section class="relative overflow-hidden border-b border-slate-200 px-5 py-10 transition-colors dark:border-slate-800 sm:px-8 sm:py-12">
 			<div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(56,189,248,0.13),transparent_28%)] dark:bg-[radial-gradient(circle_at_75%_30%,rgba(56,189,248,0.11),transparent_30%)]" aria-hidden="true"></div>
-			<div class="relative mx-auto w-full max-w-[1160px]">
-				<p class="text-sm font-bold uppercase tracking-[0.22em] text-sky-500">Trabajo seleccionado</p>
-				<h1 class="mt-5 text-5xl font-bold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-7xl">Proyectos.</h1>
-				<p class="mt-6 max-w-2xl text-lg font-medium leading-relaxed text-slate-500 dark:text-slate-400 sm:text-xl">
+			<div data-reveal class="relative mx-auto flex w-full max-w-[1160px] flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+				<div class="shrink-0">
+					<h1 class="text-4xl font-extrabold leading-none tracking-[-0.055em] text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
+						<span data-i18n-es="Proyectos" data-i18n-en="Projects">Proyectos</span><span class="text-sky-500" aria-hidden="true">.</span>
+					</h1>
+					<div class="mt-4 h-1 w-16 rounded-full bg-sky-500" aria-hidden="true"></div>
+				</div>
+				<p class="max-w-xl text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400 sm:pb-1 sm:text-right sm:text-base" data-i18n-es="Una selección de productos web, plataformas informativas y sistemas de gestión construidos alrededor de problemas concretos." data-i18n-en="A selection of web products, informational platforms, and management systems built around real-world problems.">
 					Una selección de productos web, plataformas informativas y sistemas de gestión construidos alrededor de problemas concretos.
 				</p>
 			</div>
 		</section>
 
-		<section class="bg-slate-100 px-8 py-16 transition-colors dark:bg-slate-900 sm:py-20" aria-labelledby="projects-list-title">
+		<section class="overflow-hidden bg-slate-200/70 px-6 py-16 transition-colors dark:bg-slate-900 sm:px-8 sm:py-20" aria-labelledby="projects-list-title">
 			<div class="mx-auto w-full max-w-[1160px]">
-				<div class="flex items-center justify-between gap-4">
-					<h2 id="projects-list-title" class="text-2xl font-bold text-slate-950 dark:text-white">Todos los proyectos</h2>
-					<p class="text-sm font-bold tabular-nums text-slate-400">{String(projects.length).padStart(2, '0')} proyectos</p>
+				<div data-reveal class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+					<h2 id="projects-list-title" class="text-2xl font-bold tracking-[-0.025em] text-slate-950 dark:text-white sm:text-3xl" data-i18n-es="Todos los proyectos" data-i18n-en="All projects">Todos los proyectos</h2>
+					<div class="flex w-full items-center justify-end sm:w-auto">
+						<div class="flex items-center rounded-xl border border-slate-300 bg-white p-1 dark:border-slate-700 dark:bg-slate-950" role="group" aria-label="Cambiar vista de proyectos" data-i18n-label-es="Cambiar vista de proyectos" data-i18n-label-en="Change project view">
+							<button type="button" data-project-view-button="slider" class="project-view-button grid h-9 w-9 place-items-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" aria-pressed="true" aria-label="Mostrar slider" data-i18n-label-es="Mostrar slider" data-i18n-label-en="Show slider">
+								<span class="project-view-slider-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+							</button>
+							<button type="button" data-project-view-button="grid" class="project-view-button grid h-9 w-9 place-items-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" aria-pressed="false" aria-label="Mostrar cuadrícula" data-i18n-label-es="Mostrar cuadrícula" data-i18n-label-en="Show grid">
+								<span class="project-view-grid-icon grid grid-cols-2 gap-0.5" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+							</button>
+						</div>
+					</div>
 				</div>
-				<div class="flex flex-wrap justify-between gap-y-12 py-10">
-					{projects.map((project) => <ProjectCard project={project} />)}
+
+				<div data-reveal data-reveal-delay="100" data-project-slider data-project-slider-view class="projects-slider mt-7" role="region" aria-roledescription="carrusel" aria-label="Proyectos de Douglas Guerrero">
+					<div data-slider-viewport class="project-slider-viewport overflow-hidden py-4" tabindex="0">
+						<div data-slider-track class="project-slider-track flex items-stretch gap-6">
+							{projects.map((project, index) => (
+								<div data-project-slide data-project-index={index} class="project-slide min-w-0" role="group" aria-roledescription="diapositiva" aria-label={`${index + 1} de ${projects.length}`}>
+									<ProjectCard project={project} />
+								</div>
+							))}
+						</div>
+					</div>
+
+					<div class="mt-7 flex items-center justify-center gap-4">
+						<button type="button" data-slider-previous class="slider-arrow-button group grid h-11 w-11 place-items-center rounded-full border border-slate-300 bg-white text-slate-700 transition duration-200 hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-50 hover:text-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 active:translate-y-0 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-sky-400 dark:hover:bg-slate-800 dark:hover:text-sky-400 dark:focus-visible:ring-offset-slate-900" aria-label="Proyecto anterior" data-i18n-label-es="Proyecto anterior" data-i18n-label-en="Previous project">
+							<span class="slider-arrow-icon slider-arrow-left" aria-hidden="true"></span>
+						</button>
+
+						<div data-slider-dots class="flex min-w-28 items-center justify-center gap-2" aria-label="Seleccionar proyecto">
+							{projects.map((project, index) => (
+								<button type="button" data-slider-dot={index} class:list={['project-slider-dot h-2 w-2 rounded-full bg-slate-400/60 transition-all', index === 0 && 'is-active']} aria-label={`Ir al proyecto ${project.name}`}></button>
+							))}
+						</div>
+
+						<button type="button" data-slider-next class="slider-arrow-button group grid h-11 w-11 place-items-center rounded-full border border-slate-300 bg-white text-slate-700 transition duration-200 hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-50 hover:text-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 active:translate-y-0 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-sky-400 dark:hover:bg-slate-800 dark:hover:text-sky-400 dark:focus-visible:ring-offset-slate-900" aria-label="Proyecto siguiente" data-i18n-label-es="Proyecto siguiente" data-i18n-label-en="Next project">
+							<span class="slider-arrow-icon slider-arrow-right" aria-hidden="true"></span>
+						</button>
+					</div>
+
+					<p data-slider-status class="sr-only" aria-live="polite" aria-atomic="true">Proyecto 1 de {projects.length}</p>
+				</div>
+
+				<div data-project-grid-view class="mt-11" hidden role="region" aria-label="Cuadrícula de proyectos de Douglas Guerrero">
+					<div class="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
+						{projects.map((project) => <ProjectCard project={project} />)}
+					</div>
 				</div>
 			</div>
 		</section>
+
+		<section class="relative isolate overflow-hidden border-t border-slate-300 bg-slate-100 px-5 py-16 transition-colors dark:border-slate-800 dark:bg-slate-950 sm:px-8 sm:py-20" aria-labelledby="certifications-title">
+			<div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_84%_18%,rgba(251,191,36,0.11),transparent_25%)] dark:bg-[radial-gradient(circle_at_84%_18%,rgba(245,158,11,0.08),transparent_28%)]" aria-hidden="true"></div>
+			<div class="relative z-10 mx-auto w-full max-w-[1160px]">
+				<div data-reveal class="max-w-2xl">
+					<h2 id="certifications-title" class="text-3xl font-bold tracking-[-0.035em] text-slate-950 dark:text-white sm:text-4xl" data-i18n-es="Formación y certificaciones." data-i18n-en="Education & Certifications.">Formación y certificaciones.</h2>
+					<div class="mt-3 h-0.5 w-12 rounded-full bg-sky-500" aria-hidden="true"></div>
+					<p class="mt-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400 sm:text-base" data-i18n-es="Mi formación profesional y las certificaciones que respaldan mi experiencia técnica." data-i18n-en="My professional education and the certifications that support my technical experience.">Mi formación profesional y las certificaciones que respaldan mi experiencia técnica.</p>
+				</div>
+				<div data-reveal-group class="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{certificates.map((certificate) => <CertificateCard certificate={certificate} />)}
+				</div>
+			</div>
+		</section>
+
+		<dialog data-project-modal class="project-modal m-auto max-h-[96vh] w-[min(92vw,46rem)] select-none overflow-hidden rounded-2xl border border-slate-200 bg-white p-0 text-slate-900 backdrop:bg-slate-950/75 dark:border-slate-700 dark:bg-slate-900 dark:text-white" aria-labelledby="project-modal-title">
+			<div class="relative">
+				<button type="button" data-project-modal-close class="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-slate-950/75 text-xl text-white backdrop-blur transition hover:bg-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" aria-label="Cerrar detalles del proyecto" data-i18n-label-es="Cerrar detalles del proyecto" data-i18n-label-en="Close project details">×</button>
+
+				<div class="h-[clamp(10rem,34vh,19rem)] overflow-hidden bg-slate-100 dark:bg-slate-950">
+					<img data-project-modal-image class="pointer-events-none h-full w-full select-none object-contain object-center" alt="" draggable="false" decoding="async" />
+				</div>
+
+				<div class="p-5 sm:p-6">
+					<p data-project-modal-category class="text-xs font-bold uppercase tracking-[0.18em] text-sky-500"></p>
+					<h2 id="project-modal-title" data-project-modal-title class="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl"></h2>
+					<p data-project-modal-description class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-base"></p>
+
+					<div class="mt-5 border-t border-slate-200 pt-4 dark:border-slate-700">
+						<h3 class="text-sm font-bold text-slate-950 dark:text-white" data-i18n-es="Tecnologías" data-i18n-en="Technologies">Tecnologías</h3>
+						<ul data-project-modal-technologies class="mt-2.5 flex flex-wrap gap-2"></ul>
+					</div>
+
+					<a data-project-modal-link href="#" target="_blank" rel="noopener noreferrer" class="mt-5 inline-flex items-center justify-center rounded-xl bg-sky-500 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900">
+						<span data-i18n-es="Ver proyecto" data-i18n-en="View project">Ver proyecto</span>
+						<span class="ml-2" aria-hidden="true">↗</span>
+					</a>
+				</div>
+			</div>
+		</dialog>
 	</main>
 </Layout>
+
+<script>
+	const projectModal = document.querySelector<HTMLDialogElement>('[data-project-modal]');
+	const projectModalClose = projectModal?.querySelector<HTMLButtonElement>('[data-project-modal-close]');
+	const projectModalImage = projectModal?.querySelector<HTMLImageElement>('[data-project-modal-image]');
+	const projectModalCategory = projectModal?.querySelector<HTMLElement>('[data-project-modal-category]');
+	const projectModalTitle = projectModal?.querySelector<HTMLElement>('[data-project-modal-title]');
+	const projectModalDescription = projectModal?.querySelector<HTMLElement>('[data-project-modal-description]');
+	const projectModalTechnologies = projectModal?.querySelector<HTMLUListElement>('[data-project-modal-technologies]');
+	const projectModalLink = projectModal?.querySelector<HTMLAnchorElement>('[data-project-modal-link]');
+	let activeProjectCard: HTMLElement | null = null;
+	let modalCloseTimer = 0;
+	let modalAnimationFrame = 0;
+	let modalImageRequest = 0;
+	const reducedModalMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	const renderProjectModal = (card: HTMLElement) => {
+		const language = document.documentElement.dataset.language === 'en' ? 'en' : 'es';
+		const name = card.dataset.projectName ?? '';
+		const category = language === 'en' ? card.dataset.projectCategoryEn : card.dataset.projectCategory;
+		const description = language === 'en' ? card.dataset.projectDescriptionEn : card.dataset.projectDescription;
+		const technologies = (card.dataset.projectTechnologies ?? '').split('|').filter(Boolean);
+		const link = card.dataset.projectLink ?? '';
+		const cardImage = card.querySelector<HTMLImageElement>('img');
+		const highResolutionImage = card.dataset.projectImage || cardImage?.src;
+
+		if (projectModalTitle) projectModalTitle.textContent = name;
+		if (projectModalCategory) projectModalCategory.textContent = category ?? '';
+		if (projectModalDescription) projectModalDescription.textContent = description ?? '';
+		if (projectModalImage && cardImage && highResolutionImage) {
+			projectModalImage.alt = language === 'en' ? `Expanded view of ${name}` : `Vista ampliada de ${name}`;
+			if (projectModalImage.dataset.projectName !== name) {
+				projectModalImage.dataset.projectName = name;
+				projectModalImage.src = cardImage.currentSrc || cardImage.src;
+				const requestId = ++modalImageRequest;
+				const fullImage = new Image();
+				let applied = false;
+				const applyFullImage = () => {
+					if (applied || requestId !== modalImageRequest || activeProjectCard !== card) return;
+					applied = true;
+					projectModalImage.src = highResolutionImage;
+				};
+				fullImage.onload = applyFullImage;
+				fullImage.src = highResolutionImage;
+				fullImage.decode?.().then(applyFullImage).catch(() => {});
+			}
+		}
+
+		if (projectModalTechnologies) {
+			projectModalTechnologies.replaceChildren(...technologies.map((technology) => {
+				const item = document.createElement('li');
+				item.className = 'rounded-full border border-slate-200 bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200';
+				item.textContent = technology;
+				return item;
+			}));
+		}
+
+		if (projectModalLink) {
+			projectModalLink.hidden = !link;
+			if (link) projectModalLink.href = link;
+			else projectModalLink.removeAttribute('href');
+		}
+	};
+
+	const openProjectModal = (card: HTMLElement) => {
+		if (!projectModal) return;
+		window.clearTimeout(modalCloseTimer);
+		window.cancelAnimationFrame(modalAnimationFrame);
+		projectModal.classList.remove('is-closing');
+		projectModal.classList.remove('is-visible');
+		activeProjectCard = card;
+		renderProjectModal(card);
+		if (!projectModal.open) {
+			projectModal.showModal();
+			modalAnimationFrame = window.requestAnimationFrame(() => projectModal.classList.add('is-visible'));
+		} else {
+			projectModal.classList.add('is-visible');
+		}
+	};
+
+	const closeProjectModal = () => {
+		if (!projectModal?.open || projectModal.classList.contains('is-closing')) return;
+		if (reducedModalMotion.matches) {
+			projectModal.close();
+			return;
+		}
+		projectModal.classList.add('is-closing');
+		projectModal.classList.remove('is-visible');
+		modalCloseTimer = window.setTimeout(() => {
+			projectModal.close();
+			projectModal.classList.remove('is-closing');
+		}, 180);
+	};
+
+	const handleProjectCardClick = (event: MouseEvent) => {
+		const target = event.target;
+		if (!(target instanceof Element)) return;
+		const card = target.closest<HTMLElement>('[data-project-card]');
+		if (card) openProjectModal(card);
+	};
+
+	const handleProjectCardKeydown = (event: KeyboardEvent) => {
+		if (event.key !== 'Enter' && event.key !== ' ') return;
+		const target = event.target;
+		if (!(target instanceof Element)) return;
+		const card = target.closest<HTMLElement>('[data-project-card]');
+		if (!card) return;
+		event.preventDefault();
+		openProjectModal(card);
+	};
+
+	const updateOpenProjectModalLanguage = () => {
+		if (activeProjectCard && projectModal?.open) renderProjectModal(activeProjectCard);
+	};
+
+	document.addEventListener('click', handleProjectCardClick);
+	document.addEventListener('keydown', handleProjectCardKeydown);
+	window.addEventListener('portfolio-language-change', updateOpenProjectModalLanguage);
+	projectModalClose?.addEventListener('click', closeProjectModal);
+	projectModal?.addEventListener('click', (event) => {
+		if (event.target === projectModal) closeProjectModal();
+	});
+	projectModal?.addEventListener('cancel', (event) => {
+		event.preventDefault();
+		closeProjectModal();
+	});
+	projectModal?.addEventListener('close', () => {
+		window.clearTimeout(modalCloseTimer);
+		window.cancelAnimationFrame(modalAnimationFrame);
+		projectModal.classList.remove('is-closing');
+		projectModal.classList.remove('is-visible');
+		activeProjectCard?.focus();
+		activeProjectCard = null;
+	});
+
+	const projectSliderView = document.querySelector<HTMLElement>('[data-project-slider-view]');
+	const projectGridView = document.querySelector<HTMLElement>('[data-project-grid-view]');
+	const projectViewButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-project-view-button]'));
+
+	const setProjectView = (view: 'slider' | 'grid') => {
+		if (!projectSliderView || !projectGridView) return;
+		projectSliderView.hidden = view !== 'slider';
+		projectGridView.hidden = view !== 'grid';
+		projectViewButtons.forEach((button) => {
+			button.setAttribute('aria-pressed', String(button.dataset.projectViewButton === view));
+		});
+	};
+
+	const handleProjectViewClick = (event: MouseEvent) => {
+		const target = event.target;
+		if (!(target instanceof Element)) return;
+		const button = target.closest<HTMLButtonElement>('[data-project-view-button]');
+		const view = button?.dataset.projectViewButton;
+		if (view === 'slider' || view === 'grid') setProjectView(view);
+	};
+
+	document.addEventListener('click', handleProjectViewClick);
+
+	const projectSliders = document.querySelectorAll<HTMLElement>('[data-project-slider]');
+
+	projectSliders.forEach((slider) => {
+		const viewport = slider.querySelector<HTMLElement>('[data-slider-viewport]');
+		const track = slider.querySelector<HTMLElement>('[data-slider-track]');
+		const previousButton = slider.querySelector<HTMLButtonElement>('[data-slider-previous]');
+		const nextButton = slider.querySelector<HTMLButtonElement>('[data-slider-next]');
+		const dots = Array.from(slider.querySelectorAll<HTMLButtonElement>('[data-slider-dot]'));
+		const status = slider.querySelector<HTMLElement>('[data-slider-status]');
+
+		if (!viewport || !track || !previousButton || !nextButton) return;
+
+		const originalSlides = Array.from(track.querySelectorAll<HTMLElement>('[data-project-slide]'));
+		const projectCount = originalSlides.length;
+		if (projectCount < 2) return;
+
+		const cloneSlide = (slide: HTMLElement) => {
+			const clone = slide.cloneNode(true) as HTMLElement;
+			clone.dataset.sliderClone = 'true';
+			clone.setAttribute('aria-hidden', 'true');
+			clone.querySelectorAll<HTMLElement>('a, button, input, select, textarea, [tabindex]').forEach((element) => element.setAttribute('tabindex', '-1'));
+			return clone;
+		};
+
+		const beforeClones = document.createDocumentFragment();
+		const afterClones = document.createDocumentFragment();
+		originalSlides.forEach((slide) => {
+			beforeClones.appendChild(cloneSlide(slide));
+			afterClones.appendChild(cloneSlide(slide));
+		});
+		track.prepend(beforeClones);
+		track.append(afterClones);
+
+		let currentIndex = projectCount;
+		let isAnimating = false;
+		let resizeTimer = 0;
+		let pointerStartX: number | null = null;
+		let activePointerId: number | null = null;
+		let pointerCard: HTMLElement | null = null;
+		let dragStartOffset = 0;
+		let isDragging = false;
+		let suppressClick = false;
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+		const logicalIndex = () => ((currentIndex - projectCount) % projectCount + projectCount) % projectCount;
+		const visibleSlideCount = () => window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
+
+		const updateSlideAccessibility = () => {
+			const visibleCount = visibleSlideCount();
+			Array.from(track.querySelectorAll<HTMLElement>('[data-project-slide]')).forEach((slide, index) => {
+				const visible = index >= currentIndex && index < currentIndex + visibleCount;
+				slide.setAttribute('aria-hidden', String(!visible));
+				slide.querySelectorAll<HTMLElement>('a, button, input, select, textarea, [tabindex]').forEach((element) => element.setAttribute('tabindex', visible ? '0' : '-1'));
+			});
+		};
+
+		const updateIndicators = () => {
+			const activeIndex = logicalIndex();
+			dots.forEach((dot, index) => {
+				dot.classList.toggle('is-active', index === activeIndex);
+				dot.setAttribute('aria-current', index === activeIndex ? 'true' : 'false');
+			});
+			if (status) status.textContent = `Proyecto ${activeIndex + 1} de ${projectCount}`;
+		};
+
+		const slideStep = () => {
+			const firstSlide = track.querySelector<HTMLElement>('[data-project-slide]');
+			if (!firstSlide) return 0;
+			const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 0;
+			const slideWidth = Number.parseFloat(window.getComputedStyle(firstSlide).width) || firstSlide.offsetWidth;
+			return slideWidth + gap;
+		};
+
+		const currentTrackOffset = () => {
+			const transform = window.getComputedStyle(track).transform;
+			if (!transform || transform === 'none') return -currentIndex * slideStep();
+			try {
+				return new DOMMatrixReadOnly(transform).m41;
+			} catch {
+				const match = transform.match(/^matrix(3d)?\((.+)\)$/);
+				if (!match) return -currentIndex * slideStep();
+				const values = match[2].split(',').map(Number);
+				return match[1] ? values[12] ?? 0 : values[4] ?? 0;
+			}
+		};
+
+		const setPosition = (animate: boolean) => {
+			track.style.transition = animate && !reducedMotion.matches ? '' : 'none';
+			track.style.transform = `translate3d(${-currentIndex * slideStep()}px, 0, 0)`;
+			updateIndicators();
+			updateSlideAccessibility();
+			if (!animate || reducedMotion.matches) {
+				void track.offsetWidth;
+				track.style.transition = '';
+				isAnimating = false;
+			}
+		};
+
+		const normalizeIndex = () => {
+			if (currentIndex >= projectCount * 2) currentIndex -= projectCount;
+			else if (currentIndex < projectCount) currentIndex += projectCount;
+			setPosition(false);
+		};
+
+		const goTo = (targetIndex: number) => {
+			if (isAnimating) return;
+			currentIndex = targetIndex;
+			isAnimating = !reducedMotion.matches;
+			setPosition(true);
+			if (reducedMotion.matches) normalizeIndex();
+		};
+
+		const move = (direction: number) => goTo(currentIndex + direction);
+
+		const handleTransitionEnd = (event: TransitionEvent) => {
+			if (event.propertyName !== 'transform') return;
+			isAnimating = false;
+			normalizeIndex();
+		};
+
+		const handleResize = () => {
+			window.clearTimeout(resizeTimer);
+			resizeTimer = window.setTimeout(() => setPosition(false), 120);
+		};
+
+		const goToProject = (projectIndex: number) => {
+			const candidates = [projectIndex, projectCount + projectIndex, projectCount * 2 + projectIndex];
+			const nearestIndex = candidates.reduce((nearest, candidate) => Math.abs(candidate - currentIndex) < Math.abs(nearest - currentIndex) ? candidate : nearest);
+			goTo(nearestIndex);
+		};
+
+		previousButton.addEventListener('click', () => move(-1));
+		nextButton.addEventListener('click', () => move(1));
+		dots.forEach((dot, index) => dot.addEventListener('click', () => goToProject(index)));
+		track.addEventListener('transitionend', handleTransitionEnd);
+		window.addEventListener('resize', handleResize);
+
+		viewport.addEventListener('keydown', (event) => {
+			if (event.key === 'ArrowLeft') {
+				event.preventDefault();
+				move(-1);
+			} else if (event.key === 'ArrowRight') {
+				event.preventDefault();
+				move(1);
+			}
+		});
+
+		viewport.addEventListener('pointerdown', (event) => {
+			if (event.pointerType === 'mouse' && event.button !== 0) return;
+			const target = event.target;
+			const visualOffset = currentTrackOffset();
+			track.style.transition = 'none';
+			track.style.transform = `translate3d(${visualOffset}px, 0, 0)`;
+			void track.offsetWidth;
+			isAnimating = false;
+			pointerStartX = event.clientX;
+			activePointerId = event.pointerId;
+			pointerCard = target instanceof Element ? target.closest<HTMLElement>('[data-project-card]') : null;
+			dragStartOffset = visualOffset;
+			isDragging = false;
+			suppressClick = false;
+			viewport.setPointerCapture(event.pointerId);
+		});
+
+		viewport.addEventListener('pointermove', (event) => {
+			if (pointerStartX === null || activePointerId !== event.pointerId) return;
+			const distance = event.clientX - pointerStartX;
+			if (!isDragging && Math.abs(distance) < 14) return;
+			isDragging = true;
+			suppressClick = true;
+			viewport.classList.add('is-dragging');
+			track.style.transform = `translate3d(${dragStartOffset + distance}px, 0, 0)`;
+			event.preventDefault();
+		});
+
+		viewport.addEventListener('pointerup', (event) => {
+			if (pointerStartX === null || activePointerId !== event.pointerId) return;
+			const distance = event.clientX - pointerStartX;
+			const completedDrag = isDragging;
+			if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+			pointerStartX = null;
+			activePointerId = null;
+			isDragging = false;
+			viewport.classList.remove('is-dragging');
+			track.style.transition = '';
+
+			if (!completedDrag) {
+				const cardToOpen = pointerCard;
+				pointerCard = null;
+				const step = slideStep();
+				if (step) currentIndex = Math.round(-dragStartOffset / step);
+				isAnimating = !reducedMotion.matches;
+				setPosition(true);
+				if (reducedMotion.matches) normalizeIndex();
+				if (!cardToOpen) return;
+				suppressClick = true;
+				openProjectModal(cardToOpen);
+				window.setTimeout(() => { suppressClick = false; }, 0);
+				return;
+			}
+			pointerCard = null;
+			const step = slideStep();
+			const dragThreshold = Math.min(90, step * 0.18);
+			const fractionalIndex = step ? -(dragStartOffset + distance) / step : currentIndex;
+			currentIndex = Math.abs(distance) >= dragThreshold
+				? distance > 0 ? Math.floor(fractionalIndex) : Math.ceil(fractionalIndex)
+				: Math.round(fractionalIndex);
+			isAnimating = !reducedMotion.matches;
+			setPosition(true);
+			if (reducedMotion.matches) normalizeIndex();
+			window.setTimeout(() => { suppressClick = false; }, 0);
+		});
+		viewport.addEventListener('pointercancel', (event) => {
+			if (activePointerId !== event.pointerId) return;
+			pointerStartX = null;
+			activePointerId = null;
+			pointerCard = null;
+			isDragging = false;
+			viewport.classList.remove('is-dragging');
+			track.style.transition = '';
+			const step = slideStep();
+			if (step) currentIndex = Math.round(-currentTrackOffset() / step);
+			setPosition(true);
+			window.setTimeout(() => { suppressClick = false; }, 0);
+		});
+
+		viewport.addEventListener('click', (event) => {
+			if (!suppressClick) return;
+			event.preventDefault();
+			event.stopPropagation();
+			suppressClick = false;
+		}, true);
+
+		const autoplayTimer = window.setInterval(() => {
+			if (pointerStartX === null && !projectModal?.open && !slider.matches(':hover, :focus-within') && !document.hidden) move(1);
+		}, 8000);
+
+		setPosition(false);
+
+		document.addEventListener('astro:before-swap', () => {
+			window.clearInterval(autoplayTimer);
+			window.clearTimeout(resizeTimer);
+			window.removeEventListener('resize', handleResize);
+		}, { once: true });
+	});
+
+	document.addEventListener('astro:before-swap', () => {
+		window.clearTimeout(modalCloseTimer);
+		window.cancelAnimationFrame(modalAnimationFrame);
+		document.removeEventListener('click', handleProjectCardClick);
+		document.removeEventListener('click', handleProjectViewClick);
+		document.removeEventListener('keydown', handleProjectCardKeydown);
+		window.removeEventListener('portfolio-language-change', updateOpenProjectModalLanguage);
+	}, { once: true });
+</script>
+
+<style>
+	.project-view-button {
+		color: #64748b;
+	}
+
+	.project-view-button[aria-pressed='true'] {
+		background-color: #0f172a;
+		color: #fff;
+	}
+
+	.project-view-button[aria-pressed='false']:hover {
+		background-color: #f1f5f9;
+		color: #0f172a;
+	}
+
+	:global(html[data-theme='dark']) .project-view-button {
+		color: #cbd5e1;
+	}
+
+	:global(html[data-theme='dark']) .project-view-button[aria-pressed='true'] {
+		background-color: #38bdf8;
+		color: #082f49;
+	}
+
+	:global(html[data-theme='dark']) .project-view-button[aria-pressed='false']:hover {
+		background-color: #1e293b;
+		color: #f8fafc;
+	}
+
+	.project-view-slider-icon {
+		display: flex;
+		height: 0.85rem;
+		width: 1.1rem;
+		align-items: center;
+		justify-content: center;
+		gap: 0.1rem;
+	}
+
+	.project-view-slider-icon i {
+		display: block;
+		height: 0.58rem;
+		width: 0.2rem;
+		border-radius: 0.08rem;
+		background: currentColor;
+		opacity: 0.72;
+	}
+
+	.project-view-slider-icon i:nth-child(2) {
+		height: 0.82rem;
+		width: 0.58rem;
+		opacity: 1;
+	}
+
+	.project-view-grid-icon i {
+		display: block;
+		height: 0.3rem;
+		width: 0.3rem;
+		border-radius: 0.08rem;
+		background: currentColor;
+	}
+
+	.project-slider-track {
+		will-change: transform;
+		transition: transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.project-card,
+	.project-modal {
+		-webkit-user-select: none;
+		user-select: none;
+	}
+
+	.project-card img,
+	.project-modal img {
+		-webkit-user-drag: none;
+		user-select: none;
+	}
+
+	.project-slide {
+		flex: 0 0 100%;
+	}
+
+	.project-slider-viewport {
+		touch-action: pan-y;
+		cursor: grab;
+	}
+
+	.project-slider-viewport.is-dragging {
+		cursor: grabbing;
+		user-select: none;
+	}
+
+	.project-modal::backdrop {
+		opacity: 0;
+		transition: opacity 160ms ease-out;
+	}
+
+	.project-modal {
+		opacity: 0;
+		transform: translate3d(0, 0.55rem, 0) scale(0.985);
+		transition:
+			opacity 150ms ease-out,
+			transform 190ms cubic-bezier(0.16, 1, 0.3, 1);
+		will-change: opacity, transform;
+	}
+
+	.project-modal.is-visible {
+		opacity: 1;
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+
+	.project-modal.is-visible::backdrop {
+		opacity: 1;
+	}
+
+	.project-modal.is-closing::backdrop {
+		opacity: 0;
+	}
+
+	[data-project-modal-link][hidden] {
+		display: none;
+	}
+
+	.project-slider-dot.is-active {
+		width: 2rem;
+		background-color: #38bdf8;
+	}
+
+	.slider-arrow-icon {
+		display: block;
+		width: 0.6rem;
+		height: 0.6rem;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.slider-arrow-left {
+		transform: translateX(1px) rotate(135deg);
+	}
+
+	.slider-arrow-right {
+		transform: translateX(-1px) rotate(-45deg);
+	}
+
+	[data-slider-previous]:hover .slider-arrow-left {
+		transform: translateX(-1px) rotate(135deg);
+	}
+
+	[data-slider-next]:hover .slider-arrow-right {
+		transform: translateX(1px) rotate(-45deg);
+	}
+
+	@media (min-width: 640px) {
+		.project-slide {
+			flex-basis: calc((100% - 1.5rem) / 2);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.project-slide {
+			flex-basis: calc((100% - 3rem) / 3);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.project-slider-track {
+			transition-duration: 1ms;
+		}
+
+		.project-modal,
+		.project-modal::backdrop {
+			transition: none;
+		}
+	}
+</style>
