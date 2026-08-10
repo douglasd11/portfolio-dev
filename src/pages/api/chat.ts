@@ -64,6 +64,40 @@ const getClientId = (request: Request) =>
 	request.headers.get('x-real-ip') ||
 	'local';
 
+const getFirstHeaderValue = (value: string | null) => value?.split(',')[0]?.trim();
+
+const isAllowedRequestOrigin = (request: Request, origin: string) => {
+	let originUrl: URL;
+	try {
+		originUrl = new URL(origin);
+	} catch {
+		return false;
+	}
+
+	if (originUrl.protocol !== 'https:' && originUrl.protocol !== 'http:') return false;
+
+	const allowedHosts = new Set<string>();
+	const addHost = (value: string | null | undefined) => {
+		const host = getFirstHeaderValue(value ?? null)?.toLowerCase();
+		if (host) allowedHosts.add(host);
+	};
+
+	addHost(new URL(request.url).host);
+	addHost(request.headers.get('x-forwarded-host'));
+	addHost(request.headers.get('host'));
+
+	const configuredSiteUrl = import.meta.env.SITE_URL;
+	if (configuredSiteUrl) {
+		try {
+			addHost(new URL(configuredSiteUrl).host);
+		} catch {
+			console.error('SITE_URL is not a valid URL.');
+		}
+	}
+
+	return allowedHosts.has(originUrl.host.toLowerCase());
+};
+
 const createAnonymousUserId = async (clientId: string, salt: string) => {
 	const input = new TextEncoder().encode(`${salt}:${clientId}`);
 	const digest = await crypto.subtle.digest('SHA-256', input);
@@ -105,7 +139,7 @@ export const POST: APIRoute = async ({ request }) => {
 	if (contentLength > MAX_REQUEST_BODY_LENGTH) return jsonError('La conversación es demasiado larga.', 413);
 
 	const origin = request.headers.get('origin');
-	if (origin && origin !== new URL(request.url).origin) {
+	if (origin && !isAllowedRequestOrigin(request, origin)) {
 		return jsonError('Origen de solicitud no permitido.', 403);
 	}
 
