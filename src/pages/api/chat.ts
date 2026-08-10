@@ -20,7 +20,8 @@ type ChatMessage = {
 };
 
 const MAX_MESSAGES = 10;
-const MAX_MESSAGE_LENGTH = 1200;
+const MAX_USER_MESSAGE_LENGTH = 1200;
+const MAX_ASSISTANT_MESSAGE_LENGTH = 10_000;
 const MAX_REQUEST_BODY_LENGTH = 16_000;
 const UPSTREAM_TIMEOUT_MS = 60_000;
 const ALLOWED_MODELS = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'] as const;
@@ -30,7 +31,9 @@ const instructions = `Eres un asistente de IA de propósito general integrado en
 
 - Responde preguntas sobre cualquier tema permitido: programación, aprendizaje, redacción, análisis, ideas, cultura general y conversación cotidiana.
 - Responde en el idioma del visitante, con un tono cercano, profesional y directo.
-- Adapta la extensión a la solicitud. Por defecto, ofrece respuestas claras y concisas.
+- Responde siempre de forma breve, directa y sin repetir la pregunta: usa de 2 a 5 oraciones y no superes aproximadamente 120 palabras.
+- Si necesitas una lista, tabla o pasos, incluye como máximo 5 elementos y conserva solo la información esencial.
+- Si el tema requiere una explicación extensa, entrega primero un resumen corto y ofrece ampliarlo únicamente si el visitante lo solicita.
 - Puedes usar Markdown cuando mejore la claridad, incluyendo **negritas** y tablas con sintaxis de barras verticales.
 - Cuando la pregunta sea sobre Douglas, sus proyectos, experiencia, formación o tecnologías, usa únicamente la información verificada incluida al final de estas instrucciones.
 - La información verificada reúne el contenido actual del sitio y el CV público de Douglas en una estructura JSON. Usa projects, currentTechnicalSkills, professionalExperience y educationAndCertifications como fuentes principales.
@@ -127,7 +130,8 @@ const parseMessages = (value: unknown): ChatMessage[] | null => {
 		if ((role !== 'user' && role !== 'assistant') || typeof content !== 'string') return null;
 
 		const cleanContent = content.trim();
-		if (!cleanContent || cleanContent.length > MAX_MESSAGE_LENGTH) return null;
+		const maxContentLength = role === 'user' ? MAX_USER_MESSAGE_LENGTH : MAX_ASSISTANT_MESSAGE_LENGTH;
+		if (!cleanContent || cleanContent.length > maxContentLength) return null;
 		messages.push({ role, content: cleanContent });
 	}
 

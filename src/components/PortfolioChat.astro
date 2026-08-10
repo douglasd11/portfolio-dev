@@ -471,7 +471,7 @@ const suggestions = [
 			input.style.height = 'auto';
 		}
 
-		messages.push({ role: 'user', content: prompt });
+		const pendingMessageIndex = messages.push({ role: 'user', content: prompt }) - 1;
 		addMessage('user', prompt);
 		const answerBubble = addMessage('assistant', '');
 		if (!answerBubble) return;
@@ -517,6 +517,9 @@ const suggestions = [
 			renderMarkdown(answerBubble, answer);
 			messages.push({ role: 'assistant', content: answer });
 		} catch (error) {
+			if (messages[pendingMessageIndex]?.role === 'user') {
+				messages.splice(pendingMessageIndex, 1);
+			}
 			answerBubble.classList.remove('chat-thinking');
 			if (error instanceof DOMException && error.name === 'AbortError') {
 				renderMarkdown(answerBubble, 'Respuesta detenida.');
