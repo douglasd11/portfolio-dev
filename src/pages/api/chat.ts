@@ -26,6 +26,11 @@ const MAX_REQUEST_BODY_LENGTH = 16_000;
 const UPSTREAM_TIMEOUT_MS = 60_000;
 const ALLOWED_MODELS = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b'] as const;
 const ALLOWED_REASONING_EFFORTS = ['low', 'medium', 'high'] as const;
+const MAX_COMPLETION_TOKENS: Record<ChatReasoningEffort, number> = {
+	low: 700,
+	medium: 1200,
+	high: 2200
+};
 
 const instructions = `Eres un asistente de IA de propósito general integrado en el portfolio de Douglas Guerrero.
 
@@ -230,7 +235,7 @@ export const POST: APIRoute = async ({ request }) => {
 			body: JSON.stringify({
 				model,
 				messages: [{ role: 'system', content: `${instructions}\n\nIDIOMA DE ESTA CONVERSACIÓN:\n${languageInstruction}` }, ...messages],
-				max_completion_tokens: 2200,
+				max_completion_tokens: MAX_COMPLETION_TOKENS[reasoningEffort],
 				reasoning_effort: reasoningEffort,
 				include_reasoning: false,
 				user: anonymousUserId,
@@ -248,8 +253,42 @@ export const POST: APIRoute = async ({ request }) => {
 	if (!upstream.ok || !upstream.body) {
 		clearTimeout(upstreamTimeout);
 		request.signal.removeEventListener('abort', abortUpstream);
-		console.error(`Groq Chat Completions API returned ${upstream.status}.`);
+
+		let groqError: { message?: string; type?: string; code?: string } = {};
+		if (!upstream.ok) {
+			try {
+				const payload = await upstream.json() as { error?: { message?: string; type?: string; code?: string } };
+				groqError = payload.error ?? {};
+			} catch {
+				// Groq did not return its usual JSON error body.
+			}
+		}
+
+		console.error('Groq Chat Completions API request failed.', {
+			status: upstream.status,
+			type: groqError.type,
+			code: groqError.code,
+			message: groqError.message
+		});
 		await refundReservation();
+
+		const retryAfter = upstream.headers.get('retry-after');
+		const retryHeaders: HeadersInit = retryAfter ? { 'Retry-After': retryAfter } : {};
+		if (upstream.status === 429) {
+			return jsonError('Groq alcanzó su límite temporal. Intenta nuevamente en unos segundos.', 429, retryHeaders);
+		}
+		if (upstream.status === 498) {
+			return jsonError('Groq está temporalmente ocupado. Intenta nuevamente en unos segundos.', 503, retryHeaders);
+		}
+		if (upstream.status === 401 || upstream.status === 403) {
+			return jsonError('La conexión con Groq no está autorizada. Revisa la configuración de la API.', 503);
+		}
+		if (upstream.status === 400 || upstream.status === 404 || upstream.status === 413 || upstream.status === 422) {
+			return jsonError('Groq rechazó la configuración de esta conversación.', 502);
+		}
+		if (upstream.status >= 500) {
+			return jsonError('Groq no está disponible temporalmente. Intenta nuevamente más tarde.', 503, retryHeaders);
+		}
 		return jsonError('El asistente no pudo responder en este momento.', 502);
 	}
 
